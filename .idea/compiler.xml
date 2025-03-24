@@ -6,12 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="supplier" />
         <module name="purchase" />
         <module name="backend" />
         <module name="warehouse" />
         <module name="produce" />
+        <module name="finance" />
         <module name="gateway" />
-        <module name="supplier" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -23,10 +24,11 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="back (1)" options="-parameters" />
       <module name="backend" options="-parameters" />
+      <module name="finance" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="produce" options="-parameters" />
       <module name="purchase" options="-parameters" />
-      <module name="store_manage_system" options="-parameters" />
+      <module name="store_manage_system" options="" />
       <module name="supplier" options="-parameters" />
       <module name="warehouse" options="-parameters" />
     </option>
