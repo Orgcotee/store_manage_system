@@ -1,6 +1,6 @@
 {
-    "name" : "front",
-    "appid" : "",
+    "name" : "wms",
+    "appid" : "__UNI__1DF96DC",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -50,7 +50,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxa5eb307c7f85bc2d",
         "setting" : {
             "urlCheck" : false
         },
