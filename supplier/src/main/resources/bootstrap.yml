@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: supplier # ????
+  profiles:
+    active: dev #????????dev
+  cloud:
+    nacos:
+      server-addr: 8.137.79.120:8848 # Nacos??
+      discovery:
+        namespace: 0324e641-ee9f-45b3-bca7-261f5e8b3474
+      config:
+        file-extension: yaml # ?????
+        namespace: 0324e641-ee9f-45b3-bca7-261f5e8b3474
+
