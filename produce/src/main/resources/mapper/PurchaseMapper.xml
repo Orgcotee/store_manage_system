@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.produce.mapper.PurchaseMapper">
+    <select id="selectMaterialListByProductIdAndQuantity" resultType="com.example.produce.domain.vo.PurchaseProductVO">
+        SELECT
+            pb.product_id,
+            pm.id AS materialId,
+            pm.name AS materialName,
+            pm.unit AS unit,
+            SUM(pb.quantity * #{quantity}) AS totalQuantity
+        FROM
+            product_bom pb
+            left JOIN
+            product_material pm ON pb.material_id = pm.id
+        WHERE
+            pb.product_id = #{productId}
+        GROUP BY
+            pm.id, pm.name, pm.unit
+    </select>
+</mapper>

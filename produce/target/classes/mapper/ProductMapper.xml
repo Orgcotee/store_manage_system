@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.produce.mapper.ProductMapper">
+    <select id="selectAllProducts" resultType="com.example.produce.domain.vo.ProductVO">
+        SELECT
+            p.id,
+            p.name,
+            p.type,
+            p.specification,
+            p.image,
+            p.cost,
+            p.price,
+            p.code,
+            p.state,
+            CASE p.state
+                WHEN 0 THEN '未上架'
+                WHEN 1 THEN '已上架'
+                ELSE '未知状态'
+                END AS state_desc,
+            p.sort,
+            p.create_time,
+            p.update_time
+        FROM
+            product p
+        ORDER BY
+            p.sort DESC, p.create_time DESC
+    </select>
+</mapper>

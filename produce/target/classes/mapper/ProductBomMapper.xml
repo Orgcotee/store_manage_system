@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.produce.mapper.ProductBomMapper">
+    <insert id="addProductBom">
+        INSERT INTO product_bom (
+            product_id,
+            material_id,
+            quantity,
+            max_attrition_ratio,
+            product_fluctuation,
+            create_time
+        ) VALUES (
+            #{productId},
+            #{materialId},
+            #{quantity},
+            #{maxAttritionRatio},
+            #{productFluctuation},
+            #{createTime}
+        )
+    </insert>
+    <update id="updateProductBom">
+        UPDATE product_bom SET
+            product_id = #{productId},
+            material_id = #{materialId},
+            quantity = #{quantity},
+            max_attrition_ratio = #{maxAttritionRatio},
+            product_fluctuation = #{productFluctuation}
+        WHERE
+            id = #{id}
+    </update>
+    <delete id="deleteProductBomByPBId">
+        DELETE FROM product_bom WHERE id = #{pbid}
+    </delete>
+    <select id="selectProductBomByPId" resultType="com.example.produce.domain.vo.ProductBomVO">
+        SELECT
+            pb.id,
+            pb.product_id,
+            pb.material_id,
+            m.name AS material_name,
+            m.unit AS material_unit,
+            pb.quantity,
+            pb.max_attrition_ratio,
+            pb.product_fluctuation
+        FROM
+            product_bom pb
+        LEFT JOIN product_material m ON pb.material_id = m.id
+        WHERE
+            pb.product_id = #{pid}
+    </select>
+</mapper>
