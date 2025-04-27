@@ -11,4 +11,8 @@ spring:
       config:
         file-extension: yaml # ?????
         namespace: 0324e641-ee9f-45b3-bca7-261f5e8b3474
-
+  datasource:
+    url: jdbc:mysql://rm-bp1z8606upf958pqbpo.mysql.rds.aliyuncs.com:3306/wm_2?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    username: user
+    password: User123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
