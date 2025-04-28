@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.produce.ProduceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.925 s - in com.example.produce.ProduceApplicationTests
