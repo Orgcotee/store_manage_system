@@ -1,0 +1,1 @@
+export const globalURL = 'http://localhost:8002/'

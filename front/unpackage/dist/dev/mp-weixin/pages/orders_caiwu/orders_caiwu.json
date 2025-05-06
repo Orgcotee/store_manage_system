@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "订单管理",
+  "usingComponents": {
+    "uni-segmented-control": "/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control",
+    "uni-card": "/uni_modules/uni-card/components/uni-card/uni-card"
+  }
+}

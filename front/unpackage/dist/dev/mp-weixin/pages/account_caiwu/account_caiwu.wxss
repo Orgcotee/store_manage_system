@@ -1,0 +1,137 @@
+
+.container.data-v-73fcd936 {
+  padding: 20rpx;
+  background-color: #f8f9fa;
+}
+.section-title.data-v-73fcd936 {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 30rpx;
+  padding-left: 10rpx;
+  border-left: 6rpx solid #2196F3;
+}
+.list-container.data-v-73fcd936 {
+  max-height: 60vh;
+}
+.list-item.data-v-73fcd936 {
+  padding: 25rpx;
+  margin-bottom: 25rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  border: 1rpx solid #eee;
+}
+.list-item.pending.data-v-73fcd936 {
+  border-color: #2196F3;
+  background: #f8f9ff;
+}
+.header.data-v-73fcd936 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.applicant.data-v-73fcd936 {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+}
+.department.data-v-73fcd936 {
+  color: #666;
+  font-size: 24rpx;
+}
+.detail-grid.data-v-73fcd936 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15rpx;
+  margin-bottom: 20rpx;
+}
+.detail-item.data-v-73fcd936 {
+  display: flex;
+  align-items: center;
+}
+.label.data-v-73fcd936 {
+  color: #666;
+  font-size: 26rpx;
+  min-width: 100rpx;
+}
+.value.data-v-73fcd936 {
+  color: #333;
+  font-size: 26rpx;
+}
+.amount.data-v-73fcd936 {
+  color: #ff9800;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.meta.data-v-73fcd936 {
+  color: #999;
+  font-size: 24rpx;
+  margin: 15rpx 0;
+}
+.details.data-v-73fcd936 {
+  color: #666;
+  font-size: 26rpx;
+  line-height: 1.6;
+  margin: 15rpx 0;
+}
+.action-btns.data-v-73fcd936 {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 25rpx;
+}
+.detail-btn.data-v-73fcd936 {
+  flex: 1;
+  background: #f0f0f0;
+  color: #666;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 26rpx;
+}
+.approve-btn.data-v-73fcd936 {
+  flex: 1;
+  color: #5cb85c; 
+  background: #eaffea;
+  height: 70rpx;
+  line-height: 70rpx;
+}
+.reject-btn.data-v-73fcd936 {
+  flex: 1;
+  color: #d9534f; 
+  background: #ffeceb;
+  height: 70rpx;
+  line-height: 70rpx;
+}
+.status.data-v-73fcd936 {
+  font-size: 24rpx;
+  padding: 6rpx 15rpx;
+  border-radius: 4rpx;
+}
+.status.approved.data-v-73fcd936 {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+.status.rejected.data-v-73fcd936 {
+  background: #ffebee;
+  color: #f44336;
+}
+
+/* 详情弹窗样式 */
+.detail-content.data-v-73fcd936 {
+  padding: 20rpx;
+}
+.detail-item.data-v-73fcd936 {
+  margin-bottom: 20rpx;
+}
+.detail-item.full.data-v-73fcd936 {
+  grid-column: 1 / -1;
+}
+.detail-item .label.data-v-73fcd936 {
+  width: 120rpx;
+  color: #666;
+}
+.detail-item .value.data-v-73fcd936 {
+  flex: 1;
+  word-break: break-all;
+}
+

@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/home_caiwu/home_caiwu",
+    "pages/user_caiwu/user_caiwu",
+    "pages/invoice/invoice",
+    "pages/salary_caiwu/salary_caiwu",
+    "pages/bonus/bonus",
+    "pages/account_caiwu/account_caiwu",
+    "pages/flow_caiwu/flow_caiwu",
+    "pages/orders_caiwu/orders_caiwu",
+    "pages/contract_caiwu/contract_caiwu",
+    "pages/order_detail_caiwu/order_detail_caiwu",
+    "pages/home_bumen/home_bumen",
+    "pages/staff_manage/staff_manage",
+    "pages/bonus_apply/bonus_apply",
+    "pages/account_apply/account_apply",
+    "pages/cost_caiwu/cost_caiwu",
+    "pages/store_manage/store_manage"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app x",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#007AFF",
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/home_caiwu/home_caiwu",
+        "text": "首页",
+        "iconPath": "static/cw_picture/home_tabbar/home.png",
+        "selectedIconPath": "static/cw_picture/home_tabbar/home_active.png"
+      },
+      {
+        "pagePath": "pages/home_bumen/home_bumen",
+        "text": "首页2",
+        "iconPath": "static/cw_picture/home_tabbar/home.png",
+        "selectedIconPath": "static/cw_picture/home_tabbar/home_active.png"
+      },
+      {
+        "pagePath": "pages/user_caiwu/user_caiwu",
+        "text": "我的",
+        "iconPath": "static/cw_picture/home_tabbar/user.png",
+        "selectedIconPath": "static/cw_picture/home_tabbar/user_active.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

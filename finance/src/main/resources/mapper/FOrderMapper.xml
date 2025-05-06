@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.finance.mapper.FOrderMapper">
+    <update id="updateOrders">
+        update f_order
+    <set>
+        <if test="dto.status != null">status = #{dto.status},</if>
+        <if test="dto.approvalProcess != null">approval_process = #{dto.approvalProcess},</if>
+        <if test="dto.reason != null and dto.reason != ''">reason = #{dto.reason},</if>
+    </set>
+    WHERE id = #{dto.id}
+    </update>
+    <select id="selectOrder" resultType="com.example.finance.domain.vo.OrderVO">
+        SELECT * FROM f_order
+    </select>
+    <select id="selectDetailsByOrderId" resultType="com.example.finance.domain.entity.FOrderDetail">
+        SELECT * FROM f_order_detail WHERE oid = #{orderId}
+    </select>
+
+    <!-- 基础订单字段映射 -->
+    <!-- 完整的BaseOrderMap结果映射 -->
+    <resultMap id="BaseOrderMap" type="com.example.finance.domain.vo.OrderVO">
+        <!-- 主键 -->
+        <id property="id" column="id" jdbcType="INTEGER"/>
+
+        <!-- 基础字段 -->
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="applicant" column="applicant" jdbcType="VARCHAR"/>
+        <result property="department" column="department" jdbcType="VARCHAR"/>
+
+        <!-- 账期相关 -->
+        <result property="period" column="period" jdbcType="INTEGER"/>
+        <result property="deadline" column="deadline" jdbcType="TIMESTAMP"/>
+
+        <!-- 财务类型 -->
+        <result property="collectPay" column="collect_pay" jdbcType="INTEGER"/>
+
+        <!-- 审批流程 -->
+        <result property="approvalProcess" column="approval_process" jdbcType="INTEGER"/>
+        <result property="reason" column="reason" jdbcType="VARCHAR"/>
+
+        <!-- 订单类型 -->
+        <result property="inOut" column="in_out" jdbcType="INTEGER"/>
+
+        <!-- 供应商关联 -->
+        <result property="forSupplier" column="for_supplier" jdbcType="INTEGER"/>
+<!--        <result property="forSupplierName" column="supplier_name" jdbcType="VARCHAR"/> &lt;!&ndash; 来自关联查询 &ndash;&gt;-->
+    </resultMap>
+    <!-- 根据ID查询订单 -->
+    <select id="selectOrderById" resultMap="BaseOrderMap">
+        SELECT * FROM f_order
+        WHERE id = #{orderId}
+    </select>
+</mapper>

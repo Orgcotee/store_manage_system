@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: finance # ????
+  profiles:
+    active: dev #????????dev
+  cloud:
+    nacos:
+      server-addr: 47.108.128.108:8848 # Nacos??
+      discovery:
+        namespace: 659f894e-787b-4821-a6ca-a061991c2e74
+      config:
+        file-extension: yaml # ?????
+        namespace: 659f894e-787b-4821-a6ca-a061991c2e74
+

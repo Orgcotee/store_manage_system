@@ -1,0 +1,255 @@
+
+.edit-container.data-v-0f0ce6f4 {
+  padding: 20rpx;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.form-section.data-v-0f0ce6f4 {
+  margin-bottom: 30rpx;
+}
+.form-item.data-v-0f0ce6f4 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.form-label.data-v-0f0ce6f4 {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+.form-input.data-v-0f0ce6f4 {
+  flex: 1;
+  border: 1rpx solid #eee;
+  padding: 10rpx;
+  border-radius: 6rpx;
+}
+.deduct-section.data-v-0f0ce6f4 {
+  border-top: 1rpx solid #eee;
+  padding-top: 20rpx;
+}
+
+/* 编辑按钮优化 */
+.edit-btn.data-v-0f0ce6f4 {
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 26rpx;
+  margin: 15rpx auto;
+  width: 200rpx;
+}
+.deduct-item.data-v-0f0ce6f4 {
+  display: flex;
+  gap: 10rpx;
+  margin-bottom: 15rpx;
+}
+.deduct-input.data-v-0f0ce6f4 {
+  flex: 1;
+  border: 1rpx solid #eee;
+  padding: 10rpx;
+  border-radius: 6rpx;
+}
+.deduct-input.amount.data-v-0f0ce6f4 {
+  width: 200rpx;
+}
+.deduct-btn.data-v-0f0ce6f4 {
+  width: 120rpx;
+  background: #ff4444;
+  color: white;
+  font-size: 24rpx;
+}
+.add-deduct.data-v-0f0ce6f4 {
+  width: 100%;
+  background: #f0f0f0;
+  color: #666;
+  margin-top: 15rpx;
+}
+.container.data-v-0f0ce6f4 {
+  padding: 20rpx;
+  background-color: #f8f8f8;
+}
+.search-box.data-v-0f0ce6f4 {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+  padding: 0 20rpx;
+}
+.search-input.data-v-0f0ce6f4 {
+  flex: 1;
+  height: 70rpx;
+  padding: 0 20rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  border: 1rpx solid #eee;
+}
+.refresh-btn.data-v-0f0ce6f4 {
+  width: 180rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background: #4CAF50;
+  color: white;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+.list-container.data-v-0f0ce6f4 {
+  height: calc(100vh - 160rpx);
+  padding: 0 20rpx;
+}
+.list-item.data-v-0f0ce6f4 {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  background: white;
+  border-radius: 12rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+.header.data-v-0f0ce6f4 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+.name.data-v-0f0ce6f4 {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-right: 20rpx;
+}
+.status.data-v-0f0ce6f4 {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+.status.active.data-v-0f0ce6f4 {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+.status.leave.data-v-0f0ce6f4 {
+  background: #ffebee;
+  color: #f44336;
+}
+.details.data-v-0f0ce6f4 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.department.data-v-0f0ce6f4, .salary.data-v-0f0ce6f4 {
+  font-size: 26rpx;
+  color: #666;
+}
+.separator.data-v-0f0ce6f4 {
+  color: #ddd;
+  margin: 0 10rpx;
+}
+.action-container.data-v-0f0ce6f4 {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  margin-left: 20rpx;
+}
+.action-btn.data-v-0f0ce6f4 {
+  width: 140rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 26rpx;
+  border-radius: 8rpx;
+}
+.pay.data-v-0f0ce6f4 {
+  background: #4CAF50;
+  color: white;
+}
+.detail.data-v-0f0ce6f4 {
+  background: #2196F3;
+  color: white;
+}
+.paid-text.data-v-0f0ce6f4 {
+  color: #888;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+/* 优化后的详情弹窗样式 */
+.detail-container.data-v-0f0ce6f4 {
+  padding: 20rpx 30rpx;
+  width: 680rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.detail-section.data-v-0f0ce6f4 {
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.section-title.data-v-0f0ce6f4 {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 15rpx;
+  padding-left: 10rpx;
+  border-left: 4rpx solid #2196F3;
+}
+.detail-item.data-v-0f0ce6f4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+  padding: 8rpx 0;
+  line-height: 1.4;
+}
+.detail-label.data-v-0f0ce6f4 {
+  color: #666;
+  font-size: 26rpx;
+  flex-shrink: 0;
+  width: 160rpx;
+}
+.detail-value.data-v-0f0ce6f4 {
+  color: #333;
+  font-size: 26rpx;
+  font-weight: 500;
+  text-align: right;
+  flex: 1;
+  word-break: break-all;
+  padding-left: 20rpx;
+}
+
+/* 扣款项优化 */
+.deduct-item.data-v-0f0ce6f4 {
+  padding: 6rpx 0;
+}
+.deduct-value.data-v-0f0ce6f4 {
+  font-size: 24rpx;
+}
+.deduct-total.data-v-0f0ce6f4 {
+  color: #f44336;
+  font-weight: bold;
+}
+
+/* 汇总部分优化 */
+.summary-item.data-v-0f0ce6f4 {
+  margin: 15rpx 0;
+  padding: 8rpx 0;
+}
+.summary-label.data-v-0f0ce6f4 {
+  font-size: 26rpx;
+}
+.summary-total.data-v-0f0ce6f4 {
+  font-size: 30rpx;
+}
+.summary-value.data-v-0f0ce6f4 {
+  color: #333;
+  font-weight: 500;
+}
+.summary-tax.data-v-0f0ce6f4 {
+  color: #f44336;
+}
+.paid.data-v-0f0ce6f4 {
+  color: #4CAF50;
+}
+.unpaid.data-v-0f0ce6f4 {
+  color: #f44336;
+}
+
+/* 调整分割线颜色 */
+.detail-section.data-v-0f0ce6f4:last-child {
+  border-bottom: none;
+}
+

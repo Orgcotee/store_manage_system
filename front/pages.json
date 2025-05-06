@@ -1,17 +1,148 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/home_caiwu/home_caiwu",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "财务系统主页"
+			}
+		},
+		{
+			"path" : "pages/user_caiwu/user_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
+			"path" : "pages/invoice/invoice",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发票凭证"
+			}
+		},
+		{
+			"path" : "pages/salary_caiwu/salary_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "员工薪水"
+			}
+		},
+		{
+			"path" : "pages/bonus/bonus",
+			"style" : 
+			{
+				"navigationBarTitleText" : "奖金审批"
+			}
+		},
+		{
+			"path" : "pages/account_caiwu/account_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "报账审批"
+			}
+		},
+		{
+			"path" : "pages/flow_caiwu/flow_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "资金流水统计"
+			}
+		},
+		{
+			"path" : "pages/orders_caiwu/orders_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "订单管理"
+			}
+		},
+		{
+			"path" : "pages/contract_caiwu/contract_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "合同管理"
+			}
+		},
+		{
+			"path" : "pages/order_detail_caiwu/order_detail_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "订单详情"
+			}
+		},
+		{
+			"path" : "pages/home_bumen/home_bumen",
+			"style" : 
+			{
+				"navigationBarTitleText" : "部门经理主页"
+			}
+		},
+		{
+			"path" : "pages/staff_manage/staff_manage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "员工管理"
+			}
+		},
+		{
+			"path" : "pages/bonus_apply/bonus_apply",
+			"style" : 
+			{
+				"navigationBarTitleText" : "奖金申请"
+			}
+		},
+		{
+			"path" : "pages/account_apply/account_apply",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/cost_caiwu/cost_caiwu",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/store_manage/store_manage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "门店管理"
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "uni-app x",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
-	},
-	"uniIdRouter": {}
+	}, 
+	 "tabBar": {
+	    "color": "#999",          // 未选中文字颜色
+	    "selectedColor": "#007AFF", // 选中文字颜色
+	    "borderStyle": "black",   // 边框颜色（仅部分平台生效）
+	    "backgroundColor": "#fff", // 背景色
+	    "list": [                // Tab 列表
+	      {
+	        "pagePath": "pages/home_caiwu/home_caiwu", // 页面路径（必须在 pages 中注册）
+	        "text": "首页",                // 显示文字
+	        "iconPath": "static/cw_picture/home_tabbar/home.png",    // 未选中图标路径
+	        "selectedIconPath": "static/cw_picture/home_tabbar/home_active.png" // 选中图标路径
+	      },
+		  {
+		    "pagePath": "pages/home_bumen/home_bumen",
+		    "text": "首页2",              
+		    "iconPath": "static/cw_picture/home_tabbar/home.png",    
+		    "selectedIconPath": "static/cw_picture/home_tabbar/home_active.png"
+		  },
+	      {
+	        "pagePath": "pages/user_caiwu/user_caiwu",
+	        "text": "我的", 
+	        "iconPath": "static/cw_picture/home_tabbar/user.png",
+	        "selectedIconPath": "static/cw_picture/home_tabbar/user_active.png"
+	      }
+	    ]
+	  }
+	// "uniIdRouter": {} 
 }
