@@ -1,43 +1,23 @@
 <template>
-	<view>
-		
-	</view>
-</template>
-
-<script>
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		methods: {
-			
-		}
-	}
-</script>
-
-<style>
-
-</style>
-<template>
   <view class="container">
-    <!-- 申请表单 -->
+    <!-- 奖金申请表单 -->
     <view class="form-container">
+      <!-- 申请人信息 -->
       <view class="form-item">
-        <text class="form-label">选择员工：</text>
-        <picker 
-          @change="selectEmployee" 
-          :value="selectedIndex" 
-          :range="departmentEmployees"
-          range-key="name"
-        >
-          <view class="picker">
-            {{ selectedEmployee.name || '请选择员工' }}
-          </view>
-        </picker>
+        <text class="form-label">申请人：</text>
+        <view class="picker disabled-text">
+          {{ loginer || '未获取到申请人信息' }}
+        </view>
+      </view>
+      
+      <view class="form-item">
+        <text class="form-label">工号：</text>
+        <view class="picker disabled-text">
+          {{ loginerId || '未获取到申请人工号' }}
+        </view>
       </view>
 
+      <!-- 奖金类型选择 -->
       <view class="form-item">
         <text class="form-label">奖金类型：</text>
         <picker 
@@ -51,6 +31,7 @@
         </picker>
       </view>
 
+      <!-- 金额输入 -->
       <view class="form-item">
         <text class="form-label">金额（元）：</text>
         <input 
@@ -61,13 +42,22 @@
         />
       </view>
 
+      <!-- 申请原因 -->
       <view class="form-item">
         <text class="form-label">申请原因：</text>
         <textarea 
           v-model="formData.reason" 
           placeholder="请输入详细申请理由"
           class="textarea"
+          :maxlength="200"
         />
+      </view>
+
+      <!-- 附件上传 -->
+      <view class="form-item">
+        <text class="form-label">证明材料：</text>
+        <button class="upload-btn" @tap="uploadImage">上传附件</button>
+        <text class="file-name" v-if="formData.img">{{ fileName }}</text>
       </view>
 
       <button class="submit-btn" @tap="submitApplication">提交申请</button>
@@ -85,25 +75,36 @@
         >
           <view class="info-box">
             <view class="header">
-              <text class="employee">{{ item.employeeName }}</text>
-              <text :class="['status', item.status]">{{ statusMap[item.status] }}</text>
+              <text class="applicant">{{ item.employeeId }}{{ item.employeeName }}</text>
+              <text :class="['status', item.approvalStatus]">{{ statusMap[item.approvalStatus] }}</text>
             </view>
-            <view class="detail">
-              <text class="type">{{ item.bonusType }}</text>
+           <view class="detail-row">
+             <text class="label">类型：</text>
+             <text class="value">{{ item.category }}</text> 
+           </view>
+            <view class="detail-row">
+              <text class="label">金额：</text>
               <text class="amount">￥{{ item.amount }}</text>
             </view>
-            <view class="meta">
-              <text class="time">{{ item.applyTime }}</text>
+			<view class="meta">
+			  <text class="time">申请时间：{{ item.applyTime }}</text>
+			</view>
+            <view class="meta" v-if="item.approvalStatus === 'approved'|| item.approvalStatus === 'rejected'">
+              <text class="time">审批时间：{{ item.dealTime }}</text>
               <text class="approver" v-if="item.approver">审批人：{{ item.approver }}</text>
             </view>
-            <view class="reason" v-if="item.reason">申请理由：{{ item.reason }}</view>
-            <view class="remark" v-if="item.remark">审批意见：{{ item.remark }}</view>
+            <view class="remark-approved" v-if="item.remark && item.approvalStatus === 'approved'">
+              审批意见：{{ item.remark }}
+            </view>
+            <view class="remark-rejected" v-if="item.remark && item.approvalStatus === 'rejected'">
+              审批意见：{{ item.remark }}
+            </view>
           </view>
         </view>
       </scroll-view>
     </view>
 
-    <!-- 提交成功提示 -->
+    <!-- 提交提示 -->
     <uni-popup ref="successPopup" type="message">
       <uni-popup-message type="success" message="提交成功" />
     </uni-popup>
@@ -111,129 +112,207 @@
 </template>
 
 <script>
+import { globalURL } from '../../constant/config.js'
+
 export default {
   data() {
     return {
-      departmentEmployees: [
-        { id: 1, name: '李文文', department: '生产部' },
-        { id: 2, name: '张慧慧', department: '采购部' },
-        { id: 3, name: '王大力', department: '技术部' }
-      ],
-      bonusTypes: ['绩效奖金', '项目奖金', '季度奖金', '特殊贡献奖'],
-      selectedIndex: -1,
-      typeIndex: -1,
-      formData: {
-        employeeId: '',
-        employeeName: '',
-        bonusType: '',
-        amount: '',
-        reason: ''
+      loginer: '张伟',     // 当前登录用户（需对接用户系统）
+      loginerId: '1015',  // 当前用户ID
+      bonusTypes: ['绩效奖金', '项目奖金', '特殊贡献奖', '季度奖金'], // 奖金类型
+      typeIndex: -1,      // 选中的奖金类型索引
+	  // selectedType:'',
+      formData: {         // 表单数据
+        amount: '',       // 金额
+		bonusType: '', //奖金类型
+        reason: '',       // 申请原因
+        img: '',          // 附件路径
+        applicant: '',    // 申请人（自动填充）
+        employeeId: '',    // 员工ID（自动填充）
       },
-      applications: [
-        {
-          id: 1,
-          employeeName: '李文文',
-          bonusType: '绩效奖金',
-          amount: 1500,
-          reason: 'Q2超额完成生产指标',
-          applyTime: '2023-07-20 14:30',
-          status: 'approved',
-          approver: '财务部-张会计',
-          remark: '已核实，同意发放'
-        },
-        {
-          id: 2,
-          employeeName: '王大力',
-          bonusType: '项目奖金',
-          amount: 3000,
-          reason: 'A项目提前交付',
-          applyTime: '2023-07-18 09:15',
-          status: 'pending'
-        }
-      ],
-      statusMap: {
+      applications: [],   // 申请记录列表
+      statusMap: {        // 状态映射
         pending: '审批中',
         approved: '已通过',
         rejected: '已驳回'
-      }
+      },
+      fileName: ''        // 上传文件名
     }
   },
+  async created() {
+    await this.loadApplications() // 加载申请记录
+  },
   computed: {
-    selectedEmployee() {
-      return this.selectedIndex >= 0 
-        ? this.departmentEmployees[this.selectedIndex]
-        : {}
-    },
     selectedType() {
-      return this.typeIndex >= 0
+      return this.typeIndex >= 0 
         ? this.bonusTypes[this.typeIndex]
         : ''
     }
   },
   methods: {
-    selectEmployee(e) {
-      this.selectedIndex = e.detail.value
-      this.formData.employeeId = this.departmentEmployees[this.selectedIndex].id
-      this.formData.employeeName = this.departmentEmployees[this.selectedIndex].name
-    },
-    selectType(e) {
-      this.typeIndex = e.detail.value
-      this.formData.bonusType = this.bonusTypes[this.typeIndex]
-    },
-    validateForm() {
-      if (!this.formData.employeeId) {
-        uni.showToast({ title: '请选择员工', icon: 'none' })
-        return false
+    /**
+     * 加载申请记录
+     */
+    async loadApplications() {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/fBonus/historyById/${this.loginerId}`,
+          method: 'GET',
+        })
+        
+		console.log("获取到的数据是：",res.data.data);
+		
+        // if (res.data.code === 200) {
+          this.applications = res.data.data.map(item => ({
+            id: item.id,
+            employeeId: item.employeeId,
+            employeeName: item.applicant,
+			category: item.category,
+            reason: item.reason,
+            amount: item.amount,
+            applyTime: this.formatDate(item.applicationTime),
+            approvalStatus: this.mapStatus(item.approvalStatus),
+            approver: item.approver,
+            remark: item.approvalOpinion,
+			dealTime: this.formatDate(item.dealTime),
+          }));
+        // }
+      } catch (e) {
+        console.error('加载记录失败:', e)
+        uni.showToast({ title: '加载记录失败', icon: 'none' })
       }
-      if (!this.formData.bonusType) {
-        uni.showToast({ title: '请选择奖金类型', icon: 'none' })
+    },
+
+    /**
+     * 提交申请
+     */
+    async submitApplication() {
+      if (!this.validateForm()) return
+
+      const payload = {
+		category: this.selectedType, // 使用正确的奖金类型字段
+        applicant: this.loginer,
+        employeeId: this.loginerId,
+        amount: Number(this.formData.amount).toFixed(2),
+        reason: this.formData.reason,
+        img: this.formData.img,
+        approvalStatus: 0 // 初始状态为待审批
+      }
+
+      try {
+        const [error, res] = await uni.request({
+          url: `${globalURL}/api/fBonus/create`,
+          method: 'POST',
+          data: payload,
+          header: { 'Content-Type': 'application/json' }
+        })
+
+        if (res.data.code === 200) {
+          this.$refs.successPopup.open()
+          await this.loadApplications() // 刷新列表
+          this.resetForm()
+        }
+      } catch (e) {
+        uni.showToast({ title: '提交失败，请重试', icon: 'none' })
+      }
+    },
+
+    /**
+     * 表单验证
+     */
+    validateForm() {
+	  if (!this.formData.bonusType) {
+		uni.showToast({ title: '请选择奖金类型', icon: 'none' })
+		return false
+	  }
+      if (!this.formData.reason.trim()) {
+        uni.showToast({ title: '请输入申请原因', icon: 'none' })
         return false
       }
       if (!this.formData.amount || Number(this.formData.amount) <= 0) {
         uni.showToast({ title: '请输入有效金额', icon: 'none' })
         return false
       }
-      if (!this.formData.reason.trim()) {
-        uni.showToast({ title: '请输入申请理由', icon: 'none' })
-        return false
-      }
       return true
     },
-    submitApplication() {
-      if (!this.validateForm()) return
 
-      const newApplication = {
-        id: Date.now(),
-        ...this.formData,
-        applyTime: this.getCurrentTime(),
-        status: 'pending'
+    /**
+     * 上传附件
+     */
+    async uploadImage() {
+      try {
+        const [chooseRes] = await uni.chooseImage({ count: 1 })
+        const file = chooseRes.tempFilePaths[0]
+        
+        const [uploadRes] = await uni.uploadFile({
+          url: `${globalURL}/api/upload`,
+          filePath: file,
+          name: 'file'
+        })
+        
+        this.formData.img = JSON.parse(uploadRes.data).data
+        this.fileName = file.name.substring(0, 20) // 限制文件名显示长度
+      } catch (e) {
+        uni.showToast({ title: '上传失败', icon: 'none' })
       }
+    },
 
-      this.applications.unshift(newApplication)
-      this.resetForm()
-      this.$refs.successPopup.open()
-      setTimeout(() => this.$refs.successPopup.close(), 1500)
-    },
-    getCurrentTime() {
-      const now = new Date()
-      return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`
-    },
+    /**
+     * 重置表单
+     */
     resetForm() {
-      this.selectedIndex = -1
       this.typeIndex = -1
       this.formData = {
-        employeeId: '',
-        employeeName: '',
-        bonusType: '',
         amount: '',
-        reason: ''
+        reason: '',
+        img: '',
+		bonusType:'',
+		employeeId:this.loginerId,
+		applicant:this.loginer,
       }
+      this.fileName = ''
+    },
+
+    /**
+     * 时间格式化
+     */
+    formatDate(date) {
+      const d = new Date(date)
+      return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`
+    },
+
+    /**
+     * 状态映射
+     */
+    mapStatus(status) {
+      switch(status) {
+        case 0: return 'pending'
+        case 1: return 'approved'
+        case 2: return 'rejected'
+        default: return ''
+      }
+    },
+
+    /**
+     * 选择奖金类型
+     */
+    selectType(e) {
+      this.typeIndex = e.detail.value;
+	  this.formData.bonusType = this.bonusTypes[this.typeIndex];
     }
   }
 }
 </script>
 
 <style scoped>
+/* 复用报账页面的样式 */
+/* 新增置灰样式 */
+.disabled-text {
+  color: #999 !important;         /* 浅灰色文字 */
+  background-color: #f5f5f5;      /* 浅灰色背景 */
+  cursor: not-allowed;            /* 禁用光标 */
+  opacity: 0.9;                   /* 轻微透明效果 */
+}
 .container {
   padding: 20rpx;
   background-color: #f8f9fa;
@@ -316,7 +395,7 @@ export default {
   margin-bottom: 15rpx;
 }
 
-.employee {
+.applicant {
   font-size: 30rpx;
   color: #333;
   font-weight: 500;
@@ -343,20 +422,26 @@ export default {
   color: #f44336;
 }
 
-.detail {
+.detail-row {
   display: flex;
-  justify-content: space-between;
-  margin: 15rpx 0;
+  align-items: center;
+  margin: 10rpx 0;
 }
 
-.type {
+.label {
   color: #666;
+  font-size: 26rpx;
+  min-width: 120rpx;
+}
+
+.value {
+  color: #333;
   font-size: 26rpx;
 }
 
 .amount {
   color: #ff9800;
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: bold;
 }
 
@@ -365,17 +450,36 @@ export default {
   justify-content: space-between;
   color: #999;
   font-size: 24rpx;
-  margin-top: 10rpx;
+  margin-top: 15rpx;
 }
 
-.reason, .remark {
+.details, .remark {
   color: #666;
   font-size: 26rpx;
   margin-top: 15rpx;
   line-height: 1.6;
 }
 
-.remark {
+.remark-rejected {
   color: #f44336;
+}
+
+.remark-approved {
+  color: #666;
+}
+/* 新增上传按钮样式 */
+.upload-btn {
+  background: #f8f9fa;
+  border: 1rpx solid #e0e0e0;
+  color: #666;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+}
+
+.file-name {
+  color: #999;
+  font-size: 24rpx;
+  margin-left: 20rpx;
 }
 </style>

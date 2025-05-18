@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.finance.mapper.FBonusMapper">
+    <resultMap id="BaseResultMap" type="com.example.finance.domain.entity.FBonus">
+        <id column="id" property="id"/>
+        <result column="belong" property="belong"/>
+        <result column="amount" property="amount"/>
+        <result column="reason" property="reason"/>
+        <result column="img" property="img"/>
+        <result column="approval_status" property="approvalStatus"/>
+        <result column="approval_opinion" property="approvalOpinion"/>
+        <result column="application_time" property="applicationTime"/>
+        <result column="approver" property="approver"/>
+        <result column="deal_time" property="dealTime"/>
+        <result column="applicant" property="applicant"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="category" property="category"/>
+    </resultMap>
+
+    <select id="selectByApplicant" resultMap="BaseResultMap">
+        SELECT * FROM f_bonus
+        WHERE applicant = #{applicant}
+        <if test="status != null">
+            AND approval_status = #{status}
+        </if>
+        ORDER BY application_time DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO f_bonus (
+            belong, amount, reason, img,
+            approval_status, application_time,
+            applicant, employee_id, category
+        ) VALUES (
+                     #{belong}, #{amount}, #{reason}, #{img},
+                     0, NOW(),
+                     #{applicant}, #{employeeId},#{category}
+                 )
+    </insert>
+
+    <update id="updateById">
+        UPDATE f_bonus SET
+                           approval_status = #{approvalStatus},
+                           approval_opinion = #{approvalOpinion},
+                           approver = #{approver},
+                           deal_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectPending" resultMap="BaseResultMap">
+        SELECT * FROM f_bonus
+        WHERE approval_status = 0
+        ORDER BY application_time DESC
+    </select>
+
+    <select id="selectHistory" resultMap="BaseResultMap">
+        SELECT * FROM f_bonus
+        WHERE 1=1
+        <if test="applicant != null">
+            AND applicant = #{applicant}
+        </if>
+        <if test="status != null">
+            AND approval_status = #{status}
+        </if>
+        ORDER BY deal_time DESC
+    </select>
+    <select id="selectByApplicantId" resultType="com.example.finance.domain.entity.FBonus">
+        SELECT * FROM f_bonus
+        WHERE employee_id = #{employeeId}
+    </select>
+    <select id="selectByApprover" resultType="com.example.finance.domain.entity.FBonus">
+        SELECT * FROM f_bonus
+        WHERE approver = #{approver}
+        AND approval_status != 0
+        ORDER BY deal_time DESC
+    </select>
+</mapper>

@@ -1,4 +1,16 @@
 
+.empty-tips.data-v-8186faf4 {
+  text-align: center;
+  color: #999;
+  padding: 20rpx;
+}
+
+/* 新增日期样式 */
+.date.data-v-8186faf4 {
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 15rpx;
+}
 .container.data-v-8186faf4 {
   padding: 20rpx;
   background-color: #f5f5f5;

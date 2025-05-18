@@ -2,27 +2,35 @@
   <view class="container">
     <!-- 待审批列表 -->
     <view class="approve-container">
-      <view class="section-title">待审批报账（{{ pendingList.length }}）</view>
+      <!-- <view class="section-title">待审批报账（{{ pendingList.length }}）</view> -->
+	   <view class="section-title">待审批报账</view>
       <scroll-view scroll-y class="list-container">
+        <!-- 加载状态 -->
+        <!-- <uni-load-more v-if="loading" status="loading"></uni-load-more> -->
+        
+        <!-- 空状态 -->
+        <view v-if="!loading && pendingList.length === 0" class="empty-tip">
+          <!-- <image src="/static/images/empty.png" class="empty-img"/> -->
+          <text class="empty-text">当前没有待审批的报账申请</text>
+        </view>
+
+        <!-- 待审批列表内容 -->
         <view 
           v-for="(item, index) in pendingList" 
           :key="index" 
           class="list-item pending"
         >
-          <view class="info-box">
+          <!-- 列表项结构保持不变 -->
+		    <view class="info-box">
             <view class="header">
               <text class="applicant">{{ item.employeeName }}</text>
-              <text class="department">{{ item.department }}</text>
+              <text class="department">工号：{{ item.employeeId }}</text>
             </view>
             
             <view class="detail-grid">
               <view class="detail-item">
                 <text class="label">类型：</text>
                 <text class="value">{{ item.reimburseType }}</text>
-              </view>
-              <view class="detail-item">
-                <text class="label">单号：</text>
-                <text class="value">{{ item.purchaseOrder }}</text>
               </view>
               <view class="detail-item">
                 <text class="label">金额：</text>
@@ -46,19 +54,27 @@
       </scroll-view>
     </view>
 
+	<!-- 新增分隔区域 -->
+	  <view class="section-divider">
+		<text class="divider-text">历史审批记录</text>
+		<view class="divider-line"></view>
+	  </view>
+	  
     <!-- 审批历史 -->
     <view class="history-container">
-      <view class="section-title">审批历史</view>
+      <!-- <view class="section-title">审批历史</view> -->
       <scroll-view scroll-y class="list-container">
-        <view 
+        <!-- 历史记录内容 -->
+		 <view 
           v-for="(item, index) in historyList" 
           :key="index" 
           class="list-item"
-          :class="item.status"
+      
         >
+		    <!-- :class="item.status" -->
           <view class="info-box">
             <view class="header">
-              <text class="applicant">{{ item.employeeName }}</text>
+              <text class="applicant">{{item.employeeId}}{{ item.employeeName }}</text>
               <text :class="['status', item.status]">{{ statusMap[item.status] }}</text>
             </view>
             
@@ -68,18 +84,21 @@
                 <text class="value">{{ item.reimburseType }}</text>
               </view>
               <view class="detail-item">
-                <text class="label">单号：</text>
-                <text class="value">{{ item.purchaseOrder }}</text>
-              </view>
-              <view class="detail-item">
                 <text class="label">金额：</text>
                 <text class="amount">￥{{ item.amount }}</text>
               </view>
             </view>
-
+			<view class="meta">
+			  <text class="approver">审批人：{{ item.approver }}</text>
+			</view>
+			<view class="meta">
+			  <text class="time">详情：{{ item.details }}</text>
+			</view>
+			<view class="meta">
+              <text class="time">申请时间：{{ item.applyTime }}</text>
+            </view>
             <view class="meta">
               <text class="time">审批时间：{{ item.approveTime }}</text>
-              <text class="approver">审批人：{{ item.approver }}</text>
             </view>
             
             <view class="remark" v-if="item.remark">审批意见：{{ item.remark }}</view>
@@ -88,190 +107,410 @@
       </scroll-view>
     </view>
 
-    <!-- 审批弹窗 -->
-    <uni-popup ref="approveDialog" type="dialog">
-      <uni-popup-dialog 
-        mode="input" 
-        title="审批通过"
-        placeholder="请输入审批备注（可选）"
-        @confirm="handleApprove"
-      />
-    </uni-popup>
-
-    <uni-popup ref="rejectDialog" type="dialog">
-      <uni-popup-dialog 
-        mode="input" 
-        title="审批驳回"
-        placeholder="请输入驳回理由"
-        @confirm="handleReject"
-      />
-    </uni-popup>
-
-    <!-- 详情弹窗 -->
-    <uni-popup ref="detailPopup" type="dialog">
-      <uni-popup-dialog title="报账详情" :show-cancel="false" confirm-text="关闭">
-        <view class="detail-content" >
-          <view class="detail-item">
-            <text class="label">申请人：</text>
-            <text class="value">{{ currentDetail.employeeName }}</text>
-          </view>
-          <view class="detail-item">
-            <text class="label">部 门：</text>
-            <text class="value">{{ currentDetail.department }}</text>
-          </view>
-          <view class="detail-item">
-            <text class="label">类 型：</text>
-            <text class="value">{{ currentDetail.reimburseType }}</text>
-          </view>
-          <view class="detail-item">
-            <text class="label">单 号：</text>
-            <text class="value">{{ currentDetail.purchaseOrder }}</text>
-          </view>
-          <view class="detail-item">
-            <text class="label">金 额：</text>
-            <text class="amount">￥{{ currentDetail.amount }}</text>
-          </view>
-          <view class="detail-item full">
-            <text class="label">详 情：</text>
-            <text class="value">{{ currentDetail.details }}</text>
-          </view>
-          <view class="detail-item">
-            <text class="label">申请时间：</text>
-            <text class="value">{{ currentDetail.applyTime }}</text>
-          </view>
-        </view>
-      </uni-popup-dialog>
-    </uni-popup>
-
-    <!-- 消息提示 -->
-    <uni-popup ref="messagePopup" type="message">
-      <uni-popup-message :type="messageType" :message="messageText" />
-    </uni-popup>
+    <!-- 弹窗组件保持不变 -->
+	 <!-- 审批弹窗 -->
+	    <uni-popup ref="approveDialog" type="dialog">
+	      <uni-popup-dialog 
+	        mode="input" 
+	        title="审批通过"
+	        placeholder="请输入审批备注（可选）"
+	        @confirm="handleApprove"
+	      />
+	    </uni-popup>
+	
+	    <uni-popup ref="rejectDialog" type="dialog">
+	      <uni-popup-dialog 
+	        mode="input" 
+	        title="审批驳回"
+	        placeholder="请输入驳回理由"
+	        @confirm="handleReject"
+	      />
+	    </uni-popup>
+	
+	    <!-- 详情弹窗 -->
+	    <uni-popup ref="detailPopup" type="dialog">
+	      <uni-popup-dialog title="报账详情" :show-cancel="false" confirm-text="关闭">
+	        <view class="detail-content" >
+	          <view class="detail-item">
+	            <text class="label">申请人：</text>
+	            <text class="value">{{ currentDetail.employeeName }}</text>
+	          </view>
+			  <view class="detail-item">
+			    <text class="label">工号：</text>
+			    <text class="value">{{ currentDetail.employeeId }}</text>
+			  </view>
+	          <view class="detail-item">
+	            <text class="label">类 型：</text>
+	            <text class="value">{{ currentDetail.reimburseType }}</text>
+	          </view>
+	          <view class="detail-item">
+	            <text class="label">金 额：</text>
+	            <text class="amount">￥{{ currentDetail.amount }}</text>
+	          </view>
+	          <view class="detail-item full">
+	            <text class="label">详 情：</text>
+	            <text class="value">{{ currentDetail.details }}</text>
+	          </view>
+	          <view class="detail-item">
+	            <text class="label">申请时间：</text>
+	            <text class="value">{{ currentDetail.applyTime }}</text>
+	          </view>
+			   <!-- 附件预览 -->
+			 <!-- <view class="attachments" v-if="currentDetail.imgUrls.length > 0">
+				<text class="label">附件证明：</text>
+				<view class="img-list">
+				  <image 
+					v-for="(img, index) in currentDetail.imgUrls" 
+					:key="index"
+					:src="img"
+					mode="aspectFill"
+					class="preview-img"
+					@click="previewImage(img)"
+				  />
+				</view>
+			  </view> -->
+	        </view>
+	      </uni-popup-dialog>
+	    </uni-popup>
+	
+	    <!-- 消息提示 -->
+	    <uni-popup ref="messagePopup" type="message">
+	      <uni-popup-message :type="messageType" :message="messageText" />
+	    </uni-popup>
   </view>
 </template>
 
 <script>
+import { globalURL } from '../../constant/config.js'
 export default {
   data() {
     return {
-      currentItem: null,
-      actionType: 'approve',
-      messageType: 'success',
+	  imgUrls:'',
+	  messageType: 'success',
       messageText: '',
-      applications: [
-        {
-          id: 1,
-          employeeName: '李文文',
-          department: '生产部',
-          reimburseType: '零件采购',
-          purchaseOrder: 'CG202307001',
-          amount: 1500,
-          details: '采购10套轴承配件',
-          applyTime: '2023-07-20 14:30',
-          status: 'pending'
-        },
-        {
-          id: 2,
-          employeeName: '王大力',
-          department: '技术部',
-          reimburseType: '内部采购',
-          purchaseOrder: 'NB202307015',
-          amount: 3000,
-          details: '会议室投影设备采购',
-          applyTime: '2023-07-18 09:15',
-          status: 'approved',
-          approver: '财务部-张会计',
-          approveTime: '2023-07-19 10:00',
-          remark: '票据齐全，符合报销标准'
-        }
-      ],
+      loginer: '李娜', // 从登录信息获取实际值 **
+      loading: true,
+      currentDetail: [],
+	  currentItem: null,
+      // staffMap: {}, // 缓存员工部门信息
+      pendingList: [],
+      historyList: [],
       statusMap: {
-        pending: '待审批',
+        pending: '审批中',
         approved: '已通过',
         rejected: '已驳回'
       },
-	  // isShow:false,
+	   statusTextMap: {  // 新增状态文本映射
+        0: '待审批',
+        1: '已通过',
+        2: '已驳回'
+      }
     }
   },
-  computed: {
-    pendingList() {
-      return this.applications.filter(item => item.status === 'pending')
-    },
-    historyList() {
-      return this.applications.filter(item => item.status !== 'pending').reverse()
-    }
+  async created() {
+    await this.loadStaffData();
+    await this.loadAllData();
+  },
+  created() {
+	  this.loadAllData();
   },
   methods: {
-    showDetail(item) {
-	  console.log('当前详情数据：',item)
-      // this.currentDetail = { ...item }
-	  this.currentDetail = {
-	        employeeName: item.employeeName,
-	        department: item.department, // 字段转换
-	        reimburseType: item.reimburseType,
-	        purchaseOrder: item.purchaseOrder,
-	        amount: item.amount,
-	        details: item.details,
-	        applyTime: item.applyTime
-	      }
-	  console.log('当前详情数据：',this.currentDetail)
-	  // this.isShow = true
-      this.$refs.detailPopup.open()
-    },
-    showApproveDialog(item) {
-      this.currentItem = item
-      this.actionType = 'approve'
-      this.$refs.approveDialog.open()
-    },
-    showRejectDialog(item) {
-      this.currentItem = item
-      this.actionType = 'reject'
-      this.$refs.rejectDialog.open()
-    },
-    handleApprove(remark) {
-      const index = this.applications.findIndex(i => i.id === this.currentItem.id)
-      this.applications[index] = {
-        ...this.currentItem,
-        status: 'approved',
-        approver: '财务部-张会计',
-        approveTime: this.getCurrentTime(),
-        remark: remark || '审批通过'
+	  // 显示通过弹窗
+	  showApproveDialog(item) {
+		this.currentItem = item; // 保存当前审批项
+		console.log('当前通过数据：',this.currentItem);
+		this.$refs.approveDialog.open();
+	  },
+
+	  // 显示驳回弹窗
+	  showRejectDialog(item) {
+		this.currentItem = item; // 保存当前审批项
+		this.$refs.rejectDialog.open();
+	  },
+	  // 显示详情弹窗
+	  showDetail(item) {
+		  console.log("申请时间：",item);
+		this.currentDetail = {
+		  ...item,
+		  // 处理图片字段
+		  imgUrls: item.img ? item.img.split(',') : []
+		};
+		this.$refs.detailPopup.open();
+	  },
+
+	  // 预览图片（新增方法）
+	  previewImage(url) {
+		uni.previewImage({
+		  current: url,
+		  urls: this.currentDetail.imgUrls
+		});
+	  },
+    // 加载员工数据
+    async loadStaffData() {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/fStaff`,
+          method: 'GET'
+        });
+        this.staffMap = res.data.data.reduce((map, staff) => {
+          map[staff.name] = staff.department;
+          return map;
+        }, {});
+      } catch (e) {
+        console.error('加载员工数据失败:', e);
       }
-      this.showMessage('审批通过', 'success')
-      this.$refs.approveDialog.close()
     },
-    handleReject(remark) {
-      if (!remark.trim()) {
-        uni.showToast({ title: '请填写驳回理由', icon: 'none' })
-        return
+    // 加载所有业务数据
+    async loadAllData() {
+      this.loading = true;
+      try {
+      // 先清空列表确保加载效果可见
+      this.pendingList = [];
+      this.historyList = [];
+    
+      // 并行加载
+      await Promise.all([
+      this.loadPendingList(),
+      this.loadHistoryList()
+      ]);
+    
+      // 强制视图更新
+     this.$nextTick(() => {
+           this.$forceUpdate();
+           uni.pageScrollTo({ scrollTop: 0 }); // 滚动到顶部
+         });
+		console.log('全部数据加载完成');
+      } finally {
+        this.loading = false;
       }
+    },
+    // 加载待审批列表
+    async loadPendingList() {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/reimbursement/pending`,
+          method: 'GET'
+        });
+		console.log("待审批原始数据：",res.data.data)
+        this.pendingList = res.data.data.map(item => this.formatItem(item));
+		console.log('pendinglist:',this.pendingList);
+      } catch (e) {
+        this.showMessage('加载待审批列表失败', 'error');
+      }
+	  
+    },
+
+    // 加载审批历史
+    async loadHistoryList() {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/reimbursement/approver/${this.loginer}`,
+          method: 'GET'
+        });
+		console.log("审批历史：",res.data.data)
+		this.historyList = res.data.data.map(item => this.formatItem(item));
+      } catch (e) {
+        this.showMessage('加载审批历史失败', 'error');
+      }
+    },
+
+    // 统一格式化数据项
+    formatItem(item) {
+		// console.log("正在处理：",item);
+		const result = {
+			id: item.id,
+			employeeId: item.applicantId,
+			employeeName: item.applicant,
+			// department: this.staffMap[item.applicant] || '未知部门',
+			reimburseType: item.category,
+			amount:Number(item.amount || 0).toFixed(2),
+			details: item.details,
+			applyTime: this.formatTime(item.applicationTime),
+			status:item.status,
+			// status:item.status,
+			approver: item.approver,
+			approveTime: this.formatTime(item.dealTime),
+			remark: item.approvalOpinion,
+			img: item.img,
+			inOut:item.inOut,
+		}
+	  return result;
+    },
+
+    // 时间格式化
+    formatTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')} ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+    },
+
+// 审批通过
+  async handleApprove(remark) {
+	  const confirmed = await uni.showModal({
+	    title: '确认通过审批',
+	    content: '确定要通过该申请吗？'
+	  });
+	  if (!confirmed) return;
+	  console.log('审批人为：',this.loginer);
+    try {
+      uni.showLoading({ title: '处理中...', mask: true });
       
-      const index = this.applications.findIndex(i => i.id === this.currentItem.id)
-      this.applications[index] = {
-        ...this.currentItem,
-        status: 'rejected',
-        approver: '财务部-张会计',
-        approveTime: this.getCurrentTime(),
-        remark: remark
+	  // console.log('审批人为：',loginer);
+      const res = await uni.request({
+        url: `${globalURL}/api/reimbursement/approve/${this.currentItem.id}?approver=${encodeURIComponent(this.loginer)}&remark=${encodeURIComponent(remark)}`,
+        method: 'POST',
+      });
+      console.log(res.data.code);
+      if (res.data.code === 200) {
+		 // 清空当前操作项
+      this.currentItem = null;
+      // 刷新数据
+      await this.loadAllData();
+      // 显示成功提示
+      this.showMessage('审批通过成功', 'success');
+      // 强制滚动刷新
+      // uni.pageScrollTo({ scrollTop: 0, duration: 300 });
+	  
+	  // 一秒后执行
+	  // setTimeout(()=>{
+	  // 	// 通过之后返回上一页
+	  // 	that.back();	
+	  // },1000)
       }
-      this.showMessage('已驳回申请', 'error')
-      this.$refs.rejectDialog.close()
-    },
-    getCurrentTime() {
-      const now = new Date()
-      return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`
-    },
+    } catch (e) {
+      this.showMessage('审批操作失败', 'error');
+    } finally {
+      uni.hideLoading();
+      this.$refs.approveDialog.close();
+    }
+  },
+
+  // 审批驳回
+  async handleReject(reason) {
+	  
+    if (!reason?.trim()) {
+      uni.showToast({ title: '必须填写驳回理由', icon: 'none' });
+      return;
+    }
+
+	const confirmed = await uni.showModal({
+	  title: '确认驳回审批',
+	  content: '确定要驳回该申请吗？'
+	});
+	if (!confirmed) return;
+	
+    try {
+      uni.showLoading({ title: '处理中...', mask: true });
+      
+      const res = await uni.request({
+        url: `${globalURL}/api/reimbursement/reject/${this.currentItem.id}?approver=${encodeURIComponent(this.loginer)}&reason=${encodeURIComponent(reason)}`,
+        method: 'POST',
+      });
+      
+      if (res.data.code === 200) {
+		// 清空当前操作项
+      this.currentItem = null;
+      // 刷新数据
+      await this.loadAllData();
+      // 显示成功提示
+       this.showMessage('已驳回申请', 'success');
+      // 强制滚动刷新
+      // uni.pageScrollTo({ scrollTop: 0, duration: 300 });
+	  // 一秒后执行
+	  setTimeout(()=>{
+	  	// 驳回之后返回上一页
+	  	that.back();	
+	  },1000)
+      }
+    } catch (e) {
+      this.showMessage('操作失败', 'error');
+    } finally {
+      uni.hideLoading();
+      this.$refs.rejectDialog.close();
+    }
+  },
+
+    // 显示消息提示
     showMessage(text, type) {
-      this.messageText = text
-      this.messageType = type
-      this.$refs.messagePopup.open()
-      setTimeout(() => this.$refs.messagePopup.close(), 1500)
+      this.messageText = text;
+      this.messageType = type;
+      this.$refs.messagePopup.open();
+      setTimeout(() => this.$refs.messagePopup.close(), 1500);
     }
   }
 }
 </script>
 
 <style scoped>
+/* 附件样式 */
+.attachments {
+  margin-top: 40rpx;
+  border-top: 1rpx solid #eee;
+  padding-top: 30rpx;
+}
+
+.img-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.preview-img {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 8rpx;
+  background: #f5f5f5;
+}
+.history-container {
+  margin-top: 20rpx;
+}
+/* 新增分隔样式 */
+.section-divider {
+  position: relative;
+  margin: 40rpx 0;
+  padding: 0 20rpx;
+}
+
+.divider-text {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 0 20rpx;
+  background: #f8f9fa;
+  color: #909399;
+  font-size: 28rpx;
+  transform: translateX(20rpx);
+}
+
+.divider-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2rpx;
+  background: #e5e5e5;
+  transform: translateY(-50%);
+}
+/* 新增空状态样式 */
+.empty-tip {
+  padding: 100rpx 0;
+  text-align: center;
+}
+.empty-img {
+  width: 200rpx;
+  height: 200rpx;
+  opacity: 0.6;
+}
+.empty-text {
+  display: block;
+  color: #888;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+}
+
+/* 其他样式保持不变 */
+
 .container {
   padding: 20rpx;
   background-color: #f8f9fa;
@@ -336,7 +575,7 @@ export default {
 .label {
   color: #666;
   font-size: 26rpx;
-  min-width: 100rpx;
+  min-width: 140rpx;
 }
 
 .value {
@@ -393,11 +632,15 @@ export default {
   height: 70rpx;
   line-height: 70rpx;
 }
-
 .status {
   font-size: 24rpx;
   padding: 6rpx 15rpx;
   border-radius: 4rpx;
+}
+
+.status.pending {
+  background: #e3f2fd;
+  color: #2196F3;
 }
 
 .status.approved {

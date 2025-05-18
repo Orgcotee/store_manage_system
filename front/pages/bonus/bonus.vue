@@ -1,8 +1,8 @@
 <template>
   <view class="container">
-    <!-- 审批列表 -->
+    <!-- 待审批列表 -->
     <view class="approve-container">
-      <view class="section-title">待审批申请（{{ pendingList.length }}）</view>
+      <view class="section-title">待审批奖金（{{ pendingList.length }}）</view>
       <scroll-view scroll-y class="list-container">
         <view 
           v-for="(item, index) in pendingList" 
@@ -11,19 +11,27 @@
         >
           <view class="info-box">
             <view class="header">
-              <text class="applicant">申请人：{{ item.applicant }}</text>
-              <text class="department">{{ item.department }}</text>
+              <text class="applicant">{{ item.employeeName }}</text>
+              <text class="department">工号：{{ item.employeeId }}</text>
             </view>
-            <view class="detail">
-              <text class="employee">{{ item.employeeName }}</text>
-              <text class="type">{{ item.bonusType }}</text>
-              <text class="amount">￥{{ item.amount }}</text>
+            
+            <view class="detail-grid">
+              <view class="detail-item">
+                <text class="label">类型：</text>
+                <text class="value">{{ item.category }}</text>
+              </view>
+              <view class="detail-item">
+                <text class="label">金额：</text>
+                <text class="amount">￥{{ item.amount }}</text>
+              </view>
             </view>
+
             <view class="meta">
-              <text class="time">{{ item.applyTime }}</text>
+              <text class="time">申请时间：{{ item.applyTime }}</text>
             </view>
-            <view class="reason">申请理由：{{ item.reason }}</view>
+            
             <view class="action-btns">
+              <button class="detail-btn" @tap="showDetail(item)">查看详情</button>
               <button class="approve-btn" @tap="showApproveDialog(item)">通过</button>
               <button class="reject-btn" @tap="showRejectDialog(item)">驳回</button>
             </view>
@@ -32,9 +40,13 @@
       </scroll-view>
     </view>
 
-    <!-- 审批历史 -->
+    <!-- 历史审批记录 -->
+    <view class="section-divider">
+      <text class="divider-text">历史审批记录</text>
+      <view class="divider-line"></view>
+    </view>
+    
     <view class="history-container">
-      <view class="section-title">审批历史</view>
       <scroll-view scroll-y class="list-container">
         <view 
           v-for="(item, index) in historyList" 
@@ -44,30 +56,42 @@
         >
           <view class="info-box">
             <view class="header">
-              <text class="employee">{{ item.employeeName }}</text>
+              <text class="applicant">{{ item.employeeName }}</text>
               <text :class="['status', item.status]">{{ statusMap[item.status] }}</text>
             </view>
-            <view class="detail">
-              <text class="applicant">申请人：{{ item.applicant }}</text>
-              <text class="type">{{ item.bonusType }}</text>
-              <text class="amount">￥{{ item.amount }}</text>
+            
+            <view class="detail-grid">
+              <view class="detail-item">
+                <text class="label">类型：</text>
+                <text class="value">{{ item.category }}</text>
+              </view>
+              <view class="detail-item">
+                <text class="label">金额：</text>
+                <text class="amount">￥{{ item.amount }}</text>
+              </view>
             </view>
+
+			<view class="meta">
+			  <text class="time">申请时间：{{ item.applyTime }}</text>
+            </view>
+
             <view class="meta">
-              <text class="time">{{ item.approveTime || item.applyTime }}</text>
-              <text class="approver" v-if="item.approver">审批人：{{ item.approver }}</text>
+			  <text class="time">审批时间：{{ item.dealTime }}</text>
+              <text class="approver">审批人：{{ item.approver }}</text>
             </view>
+            
             <view class="remark" v-if="item.remark">审批意见：{{ item.remark }}</view>
           </view>
         </view>
       </scroll-view>
     </view>
 
-    <!-- 审批弹窗 -->
+    <!-- 弹窗组件 -->
     <uni-popup ref="approveDialog" type="dialog">
       <uni-popup-dialog 
         mode="input" 
         title="审批通过"
-        placeholder="请输入审批意见（可选）"
+        placeholder="请输入审批备注（可选）"
         @confirm="handleApprove"
       />
     </uni-popup>
@@ -81,7 +105,37 @@
       />
     </uni-popup>
 
-    <!-- 操作反馈 -->
+    <uni-popup ref="detailPopup" type="dialog">
+      <uni-popup-dialog title="奖金详情" :show-cancel="false" confirm-text="关闭">
+        <view class="detail-content">
+          <view class="detail-item">
+            <text class="label">申请人：</text>
+            <text class="value">{{ currentDetail.employeeName }}</text>
+          </view>
+          <view class="detail-item">
+            <text class="label">工号：</text>
+            <text class="value">{{ currentDetail.employeeId }}</text>
+          </view>
+          <view class="detail-item">
+            <text class="label">类 型：</text>
+            <text class="value">{{ currentDetail.category }}</text>
+          </view>
+          <view class="detail-item">
+            <text class="label">金 额：</text>
+            <text class="amount">￥{{ currentDetail.amount }}</text>
+          </view>
+          <view class="detail-item full">
+            <text class="label">申请原因：</text>
+            <text class="value">{{ currentDetail.reason }}</text>
+          </view>
+          <view class="detail-item">
+            <text class="label">申请时间：</text>
+            <text class="value">{{ currentDetail.applyTime }}</text>
+          </view>
+        </view>
+      </uni-popup-dialog>
+    </uni-popup>
+
     <uni-popup ref="messagePopup" type="message">
       <uni-popup-message :type="messageType" :message="messageText" />
     </uni-popup>
@@ -89,107 +143,159 @@
 </template>
 
 <script>
+import { globalURL } from '../../constant/config.js'
+
 export default {
   data() {
     return {
-      currentItem: null,
-      actionType: 'approve',
+	  loginer: '李娜', // 从登录信息获取实际值 **
       messageType: 'success',
       messageText: '',
-      applications: [
-        {
-          id: 1,
-          applicant: '生产部-李经理',
-          department: '生产部',
-          employeeName: '李文文',
-          bonusType: '绩效奖金',
-          amount: 1500,
-          reason: 'Q2超额完成生产指标',
-          applyTime: '2023-07-20 14:30',
-          status: 'pending'
-        },
-        {
-          id: 2,
-          applicant: '技术部-王总监',
-          department: '技术部',
-          employeeName: '王大力',
-          bonusType: '项目奖金',
-          amount: 3000,
-          reason: 'A项目提前交付',
-          applyTime: '2023-07-18 09:15',
-          status: 'approved',
-          approver: '财务部-张会计',
-          approveTime: '2023-07-19 10:00',
-          remark: '符合项目奖金发放标准'
-        }
-      ],
+      currentDetail: {},
+      currentItem: null,
+      pendingList: [],
+      historyList: [],
       statusMap: {
-        pending: '待审批',
+        pending: '审批中',
         approved: '已通过',
         rejected: '已驳回'
       }
     }
   },
-  computed: {
-    pendingList() {
-      return this.applications.filter(item => item.status === 'pending')
-    },
-    historyList() {
-      return this.applications.filter(item => item.status !== 'pending')
-    }
+  async created() {
+    await this.loadAllData()
   },
   methods: {
+    // 加载所有数据
+    async loadAllData() {
+      try {
+        await Promise.all([
+          this.loadPendingList(),
+          this.loadHistoryList()
+        ])
+      } catch (e) {
+        this.showMessage('数据加载失败', 'error')
+      }
+    },
+
+    // 加载待审批列表
+    async loadPendingList() {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/fBonus/pending`,
+          method: 'GET'
+        })
+        this.pendingList = res.data.data.map(this.formatItem)
+      } catch (e) {
+        this.showMessage('加载待审批列表失败', 'error')
+      }
+    },
+
+    // 加载审批历史
+    async loadHistoryList() {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/fBonus/approver/${this.loginer}`,
+          method: 'GET'
+        })
+        this.historyList = res.data.data.map(this.formatItem)
+      } catch (e) {
+        this.showMessage('加载审批历史失败', 'error')
+      }
+    },
+
+    // 格式化数据项
+    formatItem(item) {
+      return {
+        id: item.id,
+        employeeId: item.employeeId,
+        employeeName: item.applicant,
+        category: item.category,
+        amount: Number(item.amount).toFixed(2),
+        reason: item.reason,
+        applyTime: this.formatTime(item.applicationTime),
+        dealTime: this.formatTime(item.dealTime),
+        status: this.mapStatus(item.approvalStatus),
+        approver: item.approver,
+        remark: item.approvalOpinion
+      }
+    },
+
+    // 时间格式化
+    formatTime(timestamp) {
+      if (!timestamp) return '--'
+      const date = new Date(timestamp)
+      return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')} ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`
+    },
+
+    // 状态映射
+    mapStatus(status) {
+      switch(status) {
+        case 0: return 'pending'
+        case 1: return 'approved'
+        case 2: return 'rejected'
+        default: return ''
+      }
+    },
+
+    // 显示审批弹窗
     showApproveDialog(item) {
       this.currentItem = item
-      this.actionType = 'approve'
       this.$refs.approveDialog.open()
     },
-    showRejectDialog(item) {
-      this.currentItem = item
-      this.actionType = 'reject'
-      this.$refs.rejectDialog.open()
-    },
-    handleApprove(remark) {
-      if (!this.validateRemark(remark)) return
-      
-      const index = this.applications.findIndex(i => i.id === this.currentItem.id)
-      this.applications[index] = {
-        ...this.currentItem,
-        status: 'approved',
-        approver: '财务部-张会计', // 实际应从用户信息获取
-        approveTime: this.getCurrentTime(),
-        remark: remark || '同意发放'
+	// 显示驳回弹窗
+	showRejectDialog(item) {
+		this.currentItem = item; // 保存当前审批项
+		this.$refs.rejectDialog.open();
+	},
+
+    // 处理通过审批
+    async handleApprove(remark) {
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/fBonus/approve/${this.currentItem.id}?approver=${encodeURIComponent(this.loginer)}&opinion=${encodeURIComponent(remark)}&status=${1}`,
+          method: 'POST',
+        })
+    
+          await this.loadAllData()
+          this.showMessage('审批通过成功', 'success')
+      } catch (e) {
+        this.showMessage('审批操作失败', 'error')
+      } finally {
+        this.$refs.approveDialog.close()
       }
-      
-      this.showMessage('审批通过', 'success')
-      this.$refs.approveDialog.close()
     },
-    handleReject(remark) {
-      if (!this.validateRemark(remark, true)) return
-      
-      const index = this.applications.findIndex(i => i.id === this.currentItem.id)
-      this.applications[index] = {
-        ...this.currentItem,
-        status: 'rejected',
-        approver: '财务部-张会计',
-        approveTime: this.getCurrentTime(),
-        remark: remark
+
+    // 处理驳回审批
+    async handleReject(remark) {
+      if (!remark.trim()) {
+        this.showMessage('必须填写驳回理由', 'error')
+        return
       }
-      
-      this.showMessage('已驳回申请', 'error')
-      this.$refs.rejectDialog.close()
-    },
-    validateRemark(remark, isRequired = false) {
-      if (isRequired && !remark.trim()) {
-        uni.showToast({ title: '请填写驳回理由', icon: 'none' })
-        return false
+
+      try {
+        const res = await uni.request({
+          url: `${globalURL}/api/fBonus/approve/${this.currentItem.id}?approver=${encodeURIComponent(this.loginer)}&opinion=${encodeURIComponent(remark)}&status=${2}`,
+          method: 'POST',
+        })
+        
+          await this.loadAllData()
+          this.showMessage('已驳回申请', 'success')
+
+      } catch (e) {
+        this.showMessage('操作失败', 'error')
+      } finally {
+        this.$refs.rejectDialog.close()
       }
-      return true
     },
-    getCurrentTime() {
-      const now = new Date()
-      return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`
+
+    // 显示详情
+    showDetail(item) {
+      this.currentDetail = item
+      this.$refs.detailPopup.open()
     },
+
+    // 显示消息提示
     showMessage(text, type) {
       this.messageText = text
       this.messageType = type
@@ -201,16 +307,78 @@ export default {
 </script>
 
 <style scoped>
+/* 样式复用报账审批页面 */
+.attachments {
+  margin-top: 40rpx;
+  border-top: 1rpx solid #eee;
+  padding-top: 30rpx;
+}
+
+.img-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.preview-img {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 8rpx;
+  background: #f5f5f5;
+}
+.history-container {
+  margin-top: 20rpx;
+}
+/* 新增分隔样式 */
+.section-divider {
+  position: relative;
+  margin: 40rpx 0;
+  padding: 0 20rpx;
+}
+
+.divider-text {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 0 20rpx;
+  background: #f8f9fa;
+  color: #909399;
+  font-size: 28rpx;
+  transform: translateX(20rpx);
+}
+
+.divider-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2rpx;
+  background: #e5e5e5;
+  transform: translateY(-50%);
+}
+/* 新增空状态样式 */
+.empty-tip {
+  padding: 100rpx 0;
+  text-align: center;
+}
+.empty-img {
+  width: 200rpx;
+  height: 200rpx;
+  opacity: 0.6;
+}
+.empty-text {
+  display: block;
+  color: #888;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+}
+
+/* 其他样式保持不变 */
+
 .container {
   padding: 20rpx;
   background-color: #f8f9fa;
-}
-
-.approve-container, .history-container {
-  background: white;
-  border-radius: 12rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
 }
 
 .section-title {
@@ -229,24 +397,25 @@ export default {
 .list-item {
   padding: 25rpx;
   margin-bottom: 25rpx;
+  background: #fff;
   border-radius: 8rpx;
   border: 1rpx solid #eee;
 }
 
 .list-item.pending {
-  background: #f8f9ff;
   border-color: #2196F3;
+  background: #f8f9ff;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15rpx;
+  margin-bottom: 20rpx;
 }
 
-.applicant, .employee {
-  font-size: 28rpx;
+.applicant {
+  font-size: 30rpx;
   color: #333;
   font-weight: 500;
 }
@@ -256,15 +425,26 @@ export default {
   font-size: 24rpx;
 }
 
-.detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20rpx;
-  margin: 15rpx 0;
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15rpx;
+  margin-bottom: 20rpx;
 }
 
-.type {
+.detail-item {
+  display: flex;
+  align-items: center;
+}
+
+.label {
   color: #666;
+  font-size: 26rpx;
+  min-width: 140rpx;
+}
+
+.value {
+  color: #333;
   font-size: 26rpx;
 }
 
@@ -275,51 +455,95 @@ export default {
 }
 
 .meta {
-  display: flex;
-  justify-content: space-between;
   color: #999;
   font-size: 24rpx;
+  margin: 15rpx 0;
 }
 
-.reason, .remark {
+.details {
   color: #666;
   font-size: 26rpx;
-  margin-top: 15rpx;
   line-height: 1.6;
-}
-
-.remark {
-  color: #f44336;
+  margin: 15rpx 0;
 }
 
 .action-btns {
   display: flex;
   gap: 20rpx;
-  margin-top: 20rpx;
+  margin-top: 25rpx;
 }
 
-.approve-btn, .reject-btn {
+.detail-btn {
   flex: 1;
-  height: 80rpx;
-  line-height: 80rpx;
-  font-size: 28rpx;
-  border-radius: 8rpx;
+  background: #f0f0f0;
+  color: #666;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 26rpx;
 }
 
 .approve-btn {
+  flex: 1;
   color: #5cb85c; 
   background: #eaffea;
+  height: 70rpx;
+  line-height: 70rpx;
 }
 
 .reject-btn {
+  flex: 1;
   color: #d9534f; 
   background: #ffeceb;
+  height: 70rpx;
+  line-height: 70rpx;
 }
-
 .status {
   font-size: 24rpx;
   padding: 6rpx 15rpx;
   border-radius: 4rpx;
+}
+/* 
+.status.pending {
+  background: #e3f2fd;
+  color: #2196F3;
+}
+
+.status.approved {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+
+.status.rejected {
+  background: #ffebee;
+  color: #f44336;
+} */
+
+/* 详情弹窗样式 */
+.detail-content {
+  padding: 20rpx;
+}
+
+.detail-item {
+  margin-bottom: 20rpx;
+}
+
+.detail-item.full {
+  grid-column: 1 / -1;
+}
+
+.detail-item .label {
+  width: 120rpx;
+  color: #666;
+}
+
+.detail-item .value {
+  flex: 1;
+  word-break: break-all;
+}
+
+.status.pending {
+  background: #e3f2fd;
+  color: #2196F3;
 }
 
 .status.approved {
@@ -331,4 +555,16 @@ export default {
   background: #ffebee;
   color: #f44336;
 }
+
+.approve-btn {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+
+.reject-btn {
+  background: #ffebee;
+  color: #f44336;
+}
+
+/* 其他样式与报账审批页面保持一致 */
 </style>

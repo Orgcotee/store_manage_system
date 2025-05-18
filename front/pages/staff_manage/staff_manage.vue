@@ -10,7 +10,9 @@
       />
       <button @tap="addEmployee" class="add-btn">+ 新增员工</button>
     </view>
-
+	<view v-if="filteredEmployees.length === 0" class="empty-tips">
+	    没有找到匹配的员工
+	  </view>
     <!-- 员工列表 -->
     <scroll-view scroll-y class="list-container">
       <view 
@@ -22,6 +24,8 @@
           <uni-icons type="person" size="28" color="#fff"></uni-icons>
         </view> -->
         <view class="info-container">
+		  <text class="name">{{ item.id }}</text>
+		   <text class="separator">|</text>
           <text class="name">{{ item.name }}</text>
           <view class="details">
             <text class="department">{{ item.department }}</text>
@@ -32,7 +36,7 @@
         <view class="action-container">
           <button @tap="showDetail(item)" class="action-btn detail">员工详情</button>
           <button @tap="editEmployee(index)" class="action-btn edit">编辑</button>
-          <button @tap="deleteEmployee(index)" class="action-btn delete">删除</button>
+          <button @tap="deleteEmployee(item.id)" class="action-btn delete">删除</button>
         </view>
       </view>
     </scroll-view>
@@ -48,10 +52,10 @@
             <text class="label">姓名：</text>
             <input v-model="currentEmployee.name" class="form-input" />
           </view>
-          <view class="form-item">
+         <!-- <view class="form-item">
             <text class="label">工号：</text>
-            <input v-model="currentEmployee.employeeId" class="form-input" />
-          </view>
+			<input v-model="currentEmployee.id" class="form-input" :disabled="!isNew" />
+          </view> -->
           <view class="form-item">
             <text class="label">部门：</text>
             <input v-model="currentEmployee.department" class="form-input" />
@@ -60,21 +64,35 @@
             <text class="label">职位：</text>
             <input v-model="currentEmployee.position" class="form-input" />
           </view>
-          <view class="form-item">
+         <!-- <view class="form-item">
             <text class="label">入职日期：</text>
             <input 
-              v-model="currentEmployee.entryDate" 
+              v-model="currentEmployee.serviceTime" 
               type="date" 
               class="form-input"
+			  :value="formatDate(currentEmployee.serviceTime)"
+			  @input="currentEmployee.serviceTime = $event.detail.value"
             />
-          </view>
+          </view> -->
+		 <view class="form-item">
+		     <text class="label">入职日期：</text>
+		  <picker 
+		    mode="date" 
+		    :value="currentEmployee.serviceTime" 
+		    @change="dateChange"
+		  >
+		    <view class="form-input">
+		      {{ formatDate(currentEmployee.serviceTime) || "请选择员工入职日期"}}
+		    </view>
+		  </picker>
+		  </view>
 		  <view class="form-item">
             <text class="label">手机号：</text>
             <input v-model="currentEmployee.phone" class="form-input" type="number" />
           </view>
           <view class="form-item">
             <text class="label">银行卡号：</text>
-            <input v-model="currentEmployee.bankAccount" class="form-input" type="number" />
+            <input v-model="currentEmployee.bank" class="form-input" type="number" />
           </view>
           <view class="form-item">
             <text class="label">邮箱：</text>
@@ -92,10 +110,10 @@
 	          <text class="detail-label">姓名：</text>
 	          <text class="detail-value">{{ currentDetail.name }}</text>
 	        </view>
-	        <view class="detail-item">
+	        <!-- <view class="detail-item">
 	          <text class="detail-label">工号：</text>
-	          <text class="detail-value">{{ currentDetail.employeeId }}</text>
-	        </view>
+	          <text class="detail-value">{{ currentDetail.id }}</text>
+	        </view> -->
 	        <view class="detail-item">
 	          <text class="detail-label">部门：</text>
 	          <text class="detail-value">{{ currentDetail.department }}</text>
@@ -106,7 +124,7 @@
 	        </view>
 	        <view class="detail-item">
 	          <text class="detail-label">入职日期：</text>
-	          <text class="detail-value">{{ currentDetail.entryDate }}</text>
+	          <text class="detail-value">{{ formatDate(currentDetail.serviceTime) }}</text>
 	        </view>
 			<view class="detail-item">
             <text class="detail-label">手机号：</text>
@@ -114,7 +132,7 @@
           </view>
           <view class="detail-item">
             <text class="detail-label">银行卡号：</text>
-            <text class="detail-value">{{ currentDetail.bankAccount }}</text>
+            <text class="detail-value">{{ currentDetail.bank }}</text>
           </view>
           <view class="detail-item">
             <text class="detail-label">邮箱：</text>
@@ -127,56 +145,20 @@
 </template>
 
 <script>
+import { globalURL } from '../../constant/config.js'
 export default {
   data() {
     return {
       searchName: '',
-      employees: [
-        // 模拟数据
-       {
-          name: '文文',
-          employeeId: '1001',
-          department: '生产部',
-          position: '车间员工',
-          entryDate: '2022-03-15',
-          phone: '13800138000',
-          bankAccount: '6225880123456789',
-          email: 'wenwen@example.com'
-        },
-        {
-          name: '钟文慧',
-          employeeId: '1002',
-          department: '采购部',
-          position: '员工',
-          entryDate: '2021-07-01',
-          phone: '13912345678',
-          bankAccount: '6228481234567890123',
-          email: 'zhongwh@example.com'
-        },
-		{
-		  name: '钟',
-		  employeeId: '1002',
-		  department: '采购部',
-		  position: '员工',
-		  entryDate: '2021-07-01',
-		  phone: '13912345678',
-		  bankAccount: '6228481234567890123',
-		  email: 'zhongwh@example.com'
-		},
-		{
-		  name: '慧慧',
-		  employeeId: '1002',
-		  department: '采购部',
-		  position: '员工',
-		  entryDate: '2021-07-01',
-		  phone: '13912345678',
-		  bankAccount: '6228481234567890123',
-		  email: 'zhongwh@example.com'
-		}
-      ],
+      employees: [],
       currentEmployee: {},
 	  currentDetail: {},
       isNew: true
+    }
+  },
+  watch: {
+    searchName(newVal) {
+      if (!newVal) this.filteredEmployees = this.employees
     }
   },
   computed: {
@@ -186,17 +168,81 @@ export default {
 		)
     }
   },
+  mounted() {
+     this.loadData();
+   },
   methods: {
+	  dateChange(e) {
+	    this.currentEmployee.serviceTime = e.detail.value
+	  },
+	  // 新增日期格式化方法
+	    formatDate(dateString) {
+	      if (!dateString) return ''
+	      const date = new Date(dateString)
+	      const year = date.getFullYear()
+	      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+	      const day = date.getDate().toString().padStart(2, '0')
+	      return `${year}-${month}-${day}`
+	    },
+	  async loadData() {
+	       try {
+	         const res = await uni.request({
+	           url: `${globalURL}/api/fStaff`,
+	           method: 'GET'
+	         });
+			 console.log("GET的数据",res.data.data)
+	         this.employees = res.data.data;
+	       } catch (e) {
+	         uni.showToast({ title: '加载失败', icon: 'error' });
+	       }
+	     },
+	     
+	     async saveEmployee() {
+	       try {
+	         const method = this.isNew ? 'POST' : 'PUT';
+	         const url = `${globalURL}/api/fStaff`;
+	         
+			// 处理日期格式
+		    const payload = {
+		      ...this.currentEmployee,
+		      serviceTime: this.currentEmployee.serviceTime + 'T00:00:00' // 补充时间部分
+		    }
+			
+	         await uni.request({
+	           url,
+	           method,
+	           data: payload
+	         });
+	         
+	         await this.loadData(); // 重新加载数据
+	         uni.showToast({ title: '保存成功', icon: 'success' });
+	       } catch (e) {
+	         uni.showToast({ title: '保存失败', icon: 'error' });
+	       }
+	       this.$refs.editPopup.close();
+	     },
+	  	
+	     async deleteEmployee(id) {
+	       try {
+	         await uni.request({
+	           url: `${globalURL}/api/fStaff/${id}`,
+	           method: 'DELETE'
+	         });
+	         await this.loadData(); // 重新加载数据
+	       } catch (e) {
+	         uni.showToast({ title: '删除失败', icon: 'error' });
+	       }
+	     },
     addEmployee() {
       this.isNew = true
       this.currentEmployee = {
         name: '',
-        employeeId: '',
+        id: '',
         department: '',
         position: '',
-        entryDate: '',
+        serviceTime: '',
 		phone: '',
-        bankAccount: '',
+        bank: '',
         email: ''
       }
       this.$refs.editPopup.open()
@@ -207,35 +253,31 @@ export default {
       this.$refs.editPopup.open()
     },
 	showDetail(item) {
-	      this.currentDetail = {...item}
+	      this.currentDetail = {
+			...item,
+		   // 添加格式化后的日期字段
+		    formattedServiceTime: this.formatDate(item.serviceTime)}
 	      this.$refs.detailPopup.open()
 	},
-    saveEmployee() {
-      if (this.isNew) {
-        this.employees.push(this.currentEmployee)
-      } else {
-        const index = this.employees.findIndex(
-          item => item.employeeId === this.currentEmployee.employeeId
-        )
-        this.employees.splice(index, 1, this.currentEmployee)
-      }
-      uni.showToast({ title: '保存成功', icon: 'success' })
-      this.$refs.editPopup.close()
-    },
-    deleteEmployee(index) {
-      uni.showModal({
-        title: '确认删除',
-        content: '确定要删除该员工记录吗？',
-        success: (res) => {
-          if (res.confirm) this.employees.splice(index, 1)
-        }
-      })
-    },
+	 
   }
 }
 </script>
 
 <style scoped>
+
+.empty-tips {
+  text-align: center;
+  color: #999;
+  padding: 20rpx;
+}
+
+/* 新增日期样式 */
+.date {
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 15rpx;
+}
 
 .container {
   padding: 20rpx;

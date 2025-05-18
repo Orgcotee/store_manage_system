@@ -1,0 +1,123 @@
+
+.container.data-v-31934d9c {
+  padding: 40rpx;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* 成功图标动画 */
+.success-icon.data-v-31934d9c {
+  width: 160rpx;
+  height: 160rpx;
+  background: #07c160;
+  border-radius: 50%;
+  margin: 80rpx auto;
+  position: relative;
+  -webkit-animation: scaleUp-data-v-31934d9c 0.6s ease-in-out;
+          animation: scaleUp-data-v-31934d9c 0.6s ease-in-out;
+}
+.checkmark.data-v-31934d9c {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60rpx;
+  height: 100rpx;
+  border: solid #fff;
+  border-width: 0 8rpx 8rpx 0;
+  -webkit-transform: translate(-50%, -60%) rotate(45deg);
+          transform: translate(-50%, -60%) rotate(45deg);
+}
+@-webkit-keyframes scaleUp-data-v-31934d9c {
+0% { -webkit-transform: scale(0); transform: scale(0);
+}
+60% { -webkit-transform: scale(1.1); transform: scale(1.1);
+}
+100% { -webkit-transform: scale(1); transform: scale(1);
+}
+}
+@keyframes scaleUp-data-v-31934d9c {
+0% { -webkit-transform: scale(0); transform: scale(0);
+}
+60% { -webkit-transform: scale(1.1); transform: scale(1.1);
+}
+100% { -webkit-transform: scale(1); transform: scale(1);
+}
+}
+
+/* 成功文字 */
+.success-text.data-v-31934d9c {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+.title.data-v-31934d9c {
+  display: block;
+  font-size: 44rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+.amount.data-v-31934d9c {
+  font-size: 48rpx;
+  color: #07c160;
+  font-weight: bold;
+}
+
+/* 订单信息 */
+.order-info.data-v-31934d9c {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+.info-item.data-v-31934d9c {
+  display: flex;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+.info-item.data-v-31934d9c:last-child {
+  border-bottom: none;
+}
+.label.data-v-31934d9c {
+  color: #666;
+  font-size: 28rpx;
+}
+.value.data-v-31934d9c {
+  color: #333;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+/* 操作按钮 */
+.action-btns.data-v-31934d9c {
+  margin-top: 80rpx;
+  display: flex;
+  gap: 30rpx;
+  padding: 0 30rpx;
+}
+.btn.data-v-31934d9c {
+  flex: 1;
+  height: 90rpx;
+  border-radius: 45rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  transition: all 0.2s;
+}
+.back-home.data-v-31934d9c {
+  background: #fff;
+  color: #333;
+  border: 1rpx solid #ddd;
+}
+.back-home.data-v-31934d9c:active {
+  background: #f8f8f8;
+}
+.view-order.data-v-31934d9c {
+  background: #07c160;
+  color: #fff;
+}
+.view-order.data-v-31934d9c:active {
+  background: #06ad54;
+}
+

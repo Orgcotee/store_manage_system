@@ -29,6 +29,7 @@ export default {
         { image: '/static/cw_picture/home2_ui/报账.png', text: '报账' },
 		{ image: '/static/cw_picture/home2_ui/奖金.png', text: '奖金申请' },
 		{ image: '/static/cw_picture/home2_ui/员工.png', text: '员工管理' },
+		{ image: '/static/cw_picture/home_ui/支付审批.png', text: '营业额录入' },
       ],
     };
   },
@@ -47,6 +48,19 @@ export default {
 			  })
 			  break;
 		  }
+		  switch(menu) {
+				  case '营业额录入':
+				  uni.navigateTo({
+				  	url: '/pages/cost_entry/cost_entry',
+					success: () => {
+					    console.log('跳转成功');
+					  },
+					  fail: (err) => {
+					    console.log('跳转失败', err);
+					  }
+				  })
+				  break;
+	}
 		 
 		  switch(menu) {
 			  case '奖金申请':

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.finance.mapper.FStoreRecordMapper">
+    <resultMap id="BaseResultMap" type="com.example.finance.domain.entity.FStoreRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="income" property="income" jdbcType="DECIMAL"/>
+        <result column="outcome" property="outcome" jdbcType="DECIMAL"/>
+        <result column="in_detail" property="inDetail" jdbcType="VARCHAR"/>
+        <result column="out_detail" property="outDetail" jdbcType="VARCHAR"/>
+        <result column="profit" property="profit" jdbcType="DECIMAL"/>
+        <result column="frmloss" property="frmloss" jdbcType="DECIMAL"/>
+        <result column="frm_detail" property="frmDetail" jdbcType="VARCHAR"/>
+        <result column="store" property="store" jdbcType="INTEGER"/>
+        <result column="recorder" property="recorder" jdbcType="VARCHAR"/>
+        <result column="record_time" property="recordTime" jdbcType="TIMESTAMP"/>
+        <result column="year" property="year" jdbcType="CHAR"/>
+        <result column="month" property="month" jdbcType="CHAR"/>
+        <result column="day" property="day" jdbcType="CHAR"/>
+    </resultMap>
+
+    <!-- 插入日报记录 -->
+    <insert id="insert" parameterType="com.example.finance.domain.entity.FStoreRecord"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO f_store_record (
+            income,
+            outcome,
+            in_detail,
+            out_detail,
+            profit,
+            frmloss,
+            frm_detail,
+            store,
+            recorder,
+            record_time,
+            year,
+            month,
+            day
+        )
+        VALUES (
+                   #{income,jdbcType=DECIMAL},
+                   #{outcome,jdbcType=DECIMAL},
+                   #{inDetail,jdbcType=VARCHAR},
+                   #{outDetail,jdbcType=VARCHAR},
+                   #{profit,jdbcType=DECIMAL},
+                   #{frmloss,jdbcType=DECIMAL},
+                   #{frmDetail,jdbcType=VARCHAR},
+                   #{store,jdbcType=INTEGER},
+                   #{recorder,jdbcType=VARCHAR},
+                   #{recordTime,jdbcType=TIMESTAMP},
+                   #{year,jdbcType=CHAR},
+                   #{month,jdbcType=CHAR},
+                   #{day,jdbcType=CHAR}
+               )
+    </insert>
+</mapper>

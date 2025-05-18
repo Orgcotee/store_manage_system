@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back.mapper.MenuMapper">
+
+    <resultMap id="MenuVoResultMap" type="com.example.backend.entity.vo.MenuVo">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuTitle" column="menu_title"/>
+        <result property="pid" column="pid"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="url" column="url"/>
+        <result property="icon" column="icon"/>
+        <result property="remark" column="remark"/>
+        <result property="disabled" column="disabled"
+                javaType="java.lang.Boolean"
+                typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <collection property="permissions" ofType="com.example.backend.entity.Permission">
+            <id property="id" column="permission_id"/>
+            <result property="code" column="permission_code"/>
+            <result property="name" column="permission_name"/>
+            <result property="menuId" column="menu_id"/>
+        </collection>
+    </resultMap>
+    <select id="getMenuVos" resultMap="MenuVoResultMap">
+        SELECT
+            m.menu_id,
+            m.menu_name,
+            m.menu_title,
+            m.pid,
+            m.order_num,
+            m.url,
+            m.icon,
+            m.remark,
+            m.disabled,
+            m.create_date,
+            m.update_date,
+            p.id as permission_id,
+            p.code as permission_code,
+            p.name as permission_name,
+            p.menu_id
+        FROM
+            menu m
+                LEFT JOIN
+            permission p ON m.menu_id = p.menu_id
+    </select>
+</mapper>

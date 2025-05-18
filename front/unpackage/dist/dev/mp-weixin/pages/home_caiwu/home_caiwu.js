@@ -101,16 +101,16 @@ var components
 try {
   components = {
     uniNoticeBar: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar */ "uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar.vue */ 153))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar */ "uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar.vue */ 215))
     },
     uniCard: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 160))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 222))
     },
     uniRow: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-row/uni-row */ "uni_modules/uni-row/components/uni-row/uni-row").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-row/uni-row.vue */ 167))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-row/uni-row */ "uni_modules/uni-row/components/uni-row/uni-row").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-row/uni-row.vue */ 229))
     },
     uniCol: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-col/uni-col */ "uni_modules/uni-row/components/uni-col/uni-col").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-col/uni-col.vue */ 174))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-col/uni-col */ "uni_modules/uni-row/components/uni-col/uni-col").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-col/uni-col.vue */ 236))
     },
   }
 } catch (e) {
@@ -251,10 +251,13 @@ var _default = {
       }],
       items: [{
         image: '/static/cw_picture/home_ui/支付接口.png',
-        text: '支付接口'
+        text: '支付成功'
       }, {
         image: '/static/cw_picture/home_ui/历史订单.png',
-        text: '订单管理'
+        text: '外部订单'
+      }, {
+        image: '/static/cw_picture/home_ui/历史订单.png',
+        text: '内部采买'
       },
       // { image: '/static/cw_picture/home_ui/支付审批.png', text: '支付审批' },
       // { image: '/static/cw_picture/home_ui/凭证管理.png', text: '凭证管理' },
@@ -290,9 +293,35 @@ var _default = {
   methods: {
     finance_a: function finance_a(menu) {
       switch (menu) {
-        case '订单管理':
+        case '外部订单':
           uni.navigateTo({
             url: '/pages/orders_caiwu/orders_caiwu',
+            success: function success() {
+              console.log('跳转成功');
+            },
+            fail: function fail(err) {
+              console.log('跳转失败', err);
+            }
+          });
+          break;
+      }
+      switch (menu) {
+        case '支付成功':
+          uni.navigateTo({
+            url: '/pages/payment_success/payment_success',
+            success: function success() {
+              console.log('跳转成功');
+            },
+            fail: function fail(err) {
+              console.log('跳转失败', err);
+            }
+          });
+          break;
+      }
+      switch (menu) {
+        case '内部采买':
+          uni.navigateTo({
+            url: '/pages/in_buy/in_buy',
             success: function success() {
               console.log('跳转成功');
             },

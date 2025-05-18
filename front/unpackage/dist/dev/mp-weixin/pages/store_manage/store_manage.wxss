@@ -1,0 +1,191 @@
+
+.empty-tips.data-v-17829634 {
+  text-align: center;
+  padding: 30rpx;
+  color: #999;
+}
+
+/* 复用员工页面的样式，调整部分颜色标识 */
+.detail.data-v-17829634 { color: #337ab7; background: #eef7ff;
+}
+.edit.data-v-17829634 { color: #5cb85c; background: #f0fff0;
+}
+.delete.data-v-17829634 { color: #d9534f; background: #ffeceb;
+}
+
+/* 地址信息特殊样式 */
+.address.data-v-17829634 {
+  color: #666;
+  font-size: 24rpx;
+  max-width: 400rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.container.data-v-17829634 {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+}
+
+/* 搜索栏 */
+.search-box.data-v-17829634 {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+  padding: 0 20rpx;
+}
+
+/* 新增样式 */
+.detail-value.email.data-v-17829634 {
+  word-break: break-all;
+  color: #1890ff;
+}
+.form-input[type="number"].data-v-17829634 {
+  font-family: Consolas, monospace;
+}
+.search-input.data-v-17829634 {
+  flex: 1;
+  height: 70rpx;
+  padding: 0 20rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+.add-btn.data-v-17829634 {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background: #007aff;
+  color: white;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+
+/* 员工列表 */
+.list-container.data-v-17829634 {
+  height: calc(100vh - 160rpx);
+  padding: 0 20rpx;
+}
+.list-item.data-v-17829634 {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  background: white;
+  border-radius: 12rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+.avatar.data-v-17829634 {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #007aff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30rpx;
+}
+.info-container.data-v-17829634 {
+  flex: 1;
+}
+.name.data-v-17829634 {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+.details.data-v-17829634 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.details text.data-v-17829634 {
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 15rpx;
+}
+.separator.data-v-17829634 {
+  color: #ddd;
+  margin: 0 10rpx;
+}
+
+/* 操作按钮 */
+.action-container.data-v-17829634 {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  margin-left: 20rpx;
+}
+.action-btn.data-v-17829634 {
+  width: 120rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  font-size: 24rpx;
+  border-radius: 6rpx;
+  padding: 0;
+}
+.detail.data-v-17829634 { color: #337ab7; background: #eef7ff;
+}
+.edit.data-v-17829634 { color: #337ab7; background: #eef7ff;
+}
+.delete.data-v-17829634 { color: #d9534f; background: #ffeceb;
+}
+
+/* 表单样式 */
+.form-container.data-v-17829634 {
+  padding: 20rpx 0;
+}
+.form-item.data-v-17829634 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.label.data-v-17829634 {
+  width: 140rpx;
+  font-size: 28rpx;
+  color: #666;
+  flex-shrink: 0;
+}
+.form-input.data-v-17829634 {
+  flex: 1;
+  height: 70rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid #eee;
+  border-radius: 6rpx;
+  font-size: 28rpx;
+}
+
+/* 新增详情弹窗样式 */
+.detail-container.data-v-17829634 {
+  padding: 20rpx 30rpx;
+  width: 600rpx;
+}
+.detail-item.data-v-17829634 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.detail-item.data-v-17829634:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.detail-label.data-v-17829634 {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #666;
+  flex-shrink: 0;
+}
+.detail-value.data-v-17829634 {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  word-break: break-all;
+  padding-left: 20rpx;
+}
+
+/* 其他样式与员工管理页面保持一致 */
+

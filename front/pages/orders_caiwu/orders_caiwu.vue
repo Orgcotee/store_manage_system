@@ -25,7 +25,7 @@
       </view>
 
       <!-- 订单卡片 -->
-      <view v-for="order in filteredOrders" :key="order.id">
+      <view v-for="order in filteredOrders" :key="order.id" v-if="order.inOut=== 1">
         <uni-card class="finance-card">
           <!-- 卡片头部 -->
           <view class="card-header">
@@ -42,7 +42,7 @@
           <view class="divider"></view>
 
           <!-- 内容区域 -->
-          <view class="content" v-if="order.inOut=== 1">
+          <view class="content" >
             <view class="info-item">
               <text class="label">申请人：</text>
               <text>{{ order.applicant }}</text>

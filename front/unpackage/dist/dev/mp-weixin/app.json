@@ -15,7 +15,15 @@
     "pages/bonus_apply/bonus_apply",
     "pages/account_apply/account_apply",
     "pages/cost_caiwu/cost_caiwu",
-    "pages/store_manage/store_manage"
+    "pages/store_manage/store_manage",
+    "pages/in_buy/in_buy",
+    "pages/in_order_detail/in_order_detail",
+    "pages/payment/payment",
+    "components/payment/payment",
+    "pages/cost_entry/cost_entry",
+    "pages/payment_success/payment_success",
+    "pages/wechat/wechat",
+    "pages/alipay/alipay"
   ],
   "subPackages": [],
   "window": {

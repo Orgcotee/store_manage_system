@@ -101,7 +101,7 @@ var components
 try {
   components = {
     uniCard: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 160))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 222))
     },
   }
 } catch (e) {
@@ -179,7 +179,7 @@ exports.default = void 0;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 54));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 56));
-var _config = __webpack_require__(/*! ../../constant/config.js */ 96);
+var _config = __webpack_require__(/*! ../../constant/config.js */ 82);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var _default = {
@@ -324,25 +324,6 @@ var _default = {
     getExpenseType: function getExpenseType(typeCode) {
       return typeCode === 1 ? '支出' : '收入'; // 根据collectPay字段转换
     },
-    // 处理审批操作
-    // handleAudit(action) {
-    //   if (action === 'approve') {
-    //     this.orderData.status = 2
-    //     uni.showToast({ title: '审批通过', icon: 'success' })
-    //   } else {
-    //     uni.showModal({
-    //       title: '输入驳回原因',
-    //       editable: true,
-    //       success: res => {
-    //         if (res.confirm) {
-    //           this.orderData.status = 1
-    //           this.orderData.reason = res.content
-    //           uni.showToast({ title: '已驳回申请', icon: 'success' })
-    //         }
-    //       }
-    //     })
-    //   }
-    // },
     handleAudit: function handleAudit(action) {
       var _this2 = this;
       return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
@@ -474,6 +455,15 @@ var _default = {
       //传递参数订单号number=id
       uni.navigateTo({
         url: '/pages/invoice/invoice?orderId=' + id
+      });
+      // uni.navigateTo({
+      // 	// url: '../orderDetail/orderDetail?orders='+encodeURIComponent(JSON.stringify(this.orders))
+      // });
+    },
+    gotoPay: function gotoPay(id) {
+      //传递参数订单号number=id
+      uni.navigateTo({
+        url: '/pages/payment/payment?orderId=' + id
       });
       // uni.navigateTo({
       // 	// url: '../orderDetail/orderDetail?orders='+encodeURIComponent(JSON.stringify(this.orders))

@@ -69,8 +69,9 @@ export default {
 	    { num: '0', text: '报损' },
 	  ],
       items: [
-        { image: '/static/cw_picture/home_ui/支付接口.png', text: '支付接口' },
-		{ image: '/static/cw_picture/home_ui/历史订单.png', text: '订单管理' },
+        { image: '/static/cw_picture/home_ui/支付接口.png', text: '支付成功' },
+		{ image: '/static/cw_picture/home_ui/历史订单.png', text: '外部订单' },
+		{ image: '/static/cw_picture/home_ui/历史订单.png', text: '内部采买' },
 		// { image: '/static/cw_picture/home_ui/支付审批.png', text: '支付审批' },
 		// { image: '/static/cw_picture/home_ui/凭证管理.png', text: '凭证管理' },
 		{ image: '/static/cw_picture/home_ui/发票管理.png', text: '发票凭证' },
@@ -91,7 +92,7 @@ export default {
   methods: {
 	  finance_a(menu) {
 		  switch(menu) {
-			  case '订单管理':
+			  case '外部订单':
 			  uni.navigateTo({
 			  	url: '/pages/orders_caiwu/orders_caiwu',
 				success: () => {
@@ -103,6 +104,32 @@ export default {
 			  })
 			  break;
 		  }
+		  switch(menu) {
+				  case '支付成功':
+				  uni.navigateTo({
+				  	url: '/pages/payment_success/payment_success',
+					success: () => {
+					    console.log('跳转成功');
+					  },
+					  fail: (err) => {
+					    console.log('跳转失败', err);
+					  }
+				  })
+				  break;
+	}
+		  switch(menu) {
+				  case '内部采买':
+				  uni.navigateTo({
+				  	url: '/pages/in_buy/in_buy',
+					success: () => {
+					    console.log('跳转成功');
+					  },
+					  fail: (err) => {
+					    console.log('跳转失败', err);
+					  }
+				  })
+				  break;
+	}
 		 
 		  switch(menu) {
 			  case '发票凭证':

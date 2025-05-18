@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.finance.mapper.FStaffMapper">
+    <!-- 定义结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.finance.domain.entity.FStaff">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="department" property="department" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <result column="service_time" property="serviceTime" jdbcType="TIMESTAMP"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="bank" property="bank" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="basic_salary" property="basicSalary" jdbcType="DECIMAL"/>
+        <result column="bonus" property="bonus" jdbcType="DECIMAL"/>
+        <result column="distribution_status" property="distributionStatus" jdbcType="INTEGER"/>
+        <result column="social_security" property="socialSecurity" jdbcType="DECIMAL"/>
+        <result column="subsidy" property="subsidy" jdbcType="DECIMAL"/>
+        <result column="attendance" property="attendance" jdbcType="DECIMAL"/>
+        <result column="store" property="store" jdbcType="INTEGER"/>
+    </resultMap>
+    <!-- 查询所有 -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM f_staff
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="com.example.finance.domain.entity.FStaff"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO f_staff (
+            name, department, position, service_time,
+            phone, bank, email, basic_salary,
+            bonus, distribution_status, social_security,
+            subsidy, attendance, store
+        ) VALUES (
+                     #{name}, #{department}, #{position}, #{serviceTime},
+                     #{phone}, #{bank}, #{email}, #{basicSalary},
+                     #{bonus}, #{distributionStatus}, #{socialSecurity},
+                     #{subsidy}, #{attendance}, #{store}
+                 )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="com.example.finance.domain.entity.FStaff">
+        UPDATE f_staff SET
+                           name = #{name},
+                           department = #{department},
+                           position = #{position},
+                           service_time = #{serviceTime},
+                           phone = #{phone},
+                           bank = #{bank},
+                           email = #{email},
+                           basic_salary = #{basicSalary},
+                           bonus = #{bonus},
+                           distribution_status = #{distributionStatus},
+                           social_security = #{socialSecurity},
+                           subsidy = #{subsidy},
+                           attendance = #{attendance},
+                           store = #{store}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM f_staff WHERE id = #{id}
+    </delete>
+</mapper>

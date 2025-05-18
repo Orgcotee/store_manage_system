@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.finance.mapper.ReimbursementMapper">
+    <resultMap id="BaseResultMap" type="com.example.finance.domain.entity.FReimbursement">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="applicant" property="applicant" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="in_out" property="inOut" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="details" property="details" jdbcType="VARCHAR"/>
+        <result column="img" property="img" jdbcType="VARCHAR"/>
+        <result column="approval_status" property="approvalStatus" jdbcType="INTEGER"/>
+        <result column="approval_opinion" property="approvalOpinion" jdbcType="VARCHAR"/>
+        <result column="approver" property="approver" jdbcType="VARCHAR"/>
+        <result column="application_time" property="applicationTime" jdbcType="TIMESTAMP"/>
+        <result column="deal_time" property="dealTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 插入报销记录 -->
+    <insert id="insertReimbursement" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO f_reimbursement (
+            applicant_id,applicant, category, in_out, amount,
+            details, img, approval_status,
+            application_time
+        ) VALUES (
+                     #{applicantId},#{applicant}, #{category}, #{inOut}, #{amount},
+                     #{details}, #{img}, #{approvalStatus},
+                     #{applicationTime}
+                 )
+    </insert>
+
+    <update id="updateReimbursement">
+        UPDATE f_reimbursement SET
+                                   applicant = #{applicant},
+                                   category = #{category},
+                                   in_out = #{inOut},
+                                   amount = #{amount},
+                                   details = #{details},
+                                   img = #{img},
+                                   approval_status = #{approvalStatus},
+                                   approval_opinion = #{approvalOpinion},
+                                   approver = #{approver},
+                                   deal_time = #{dealTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteReimbursementById">
+        DELETE FROM f_reimbursement WHERE id = #{id}
+    </delete>
+
+    <select id="selectReimbursementById" resultMap="BaseResultMap">
+        SELECT * FROM f_reimbursement WHERE id = #{id}
+    </select>
+
+    <!-- 查询所有报销记录 -->
+    <select id="selectAllReimbursements" resultMap="BaseResultMap">
+        SELECT * FROM f_reimbursement
+    </select>
+
+    <!-- 根据申请人查询报销记录 -->
+    <select id="selectByApplicant" resultMap="BaseResultMap">
+        SELECT * FROM f_reimbursement
+        WHERE applicant = #{applicant}
+    </select>
+
+    <!-- 根据申请人id查询报销记录 -->
+    <select id="selectByApplicantId" resultMap="BaseResultMap">
+        SELECT * FROM f_reimbursement
+        WHERE applicant_id = #{applicantId}
+    </select>
+
+    <select id="selectByStatus" resultMap="BaseResultMap">
+        SELECT * FROM f_reimbursement
+        WHERE approval_status = #{status}
+    </select>
+
+    <!-- 新增审批人查询SQL -->
+    <select id="selectByApprover" resultMap="BaseResultMap">
+        SELECT * FROM f_reimbursement
+        WHERE approver = #{approver}
+        AND approval_status != 0
+        ORDER BY deal_time DESC
+    </select>
+</mapper>

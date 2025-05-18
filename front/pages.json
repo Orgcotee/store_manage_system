@@ -52,7 +52,7 @@
 			"path" : "pages/orders_caiwu/orders_caiwu",
 			"style" : 
 			{
-				"navigationBarTitleText" : "订单管理"
+				"navigationBarTitleText" : "外部订单管理"
 			}
 		},
 		{
@@ -94,14 +94,14 @@
 			"path" : "pages/account_apply/account_apply",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "报损"
 			}
 		},
 		{
 			"path" : "pages/cost_caiwu/cost_caiwu",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "成本核算"
 			}
 		},
 		{
@@ -109,6 +109,62 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "门店管理"
+			}
+		},
+		{
+			"path" : "pages/in_buy/in_buy",
+			"style" : 
+			{
+				"navigationBarTitleText" : "内部采买管理"
+			}
+		},
+		{
+			"path" : "pages/in_order_detail/in_order_detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "采购详情"
+			}
+		},
+		{
+			"path" : "pages/payment/payment",
+			"style" : 
+			{
+				"navigationBarTitleText" : "支付接口"
+			}
+		},
+		{
+			"path" : "components/payment/payment",
+			"style" : 
+			{
+				"navigationBarTitleText" : "支付接口模块"
+			}
+		},
+		{
+			"path" : "pages/cost_entry/cost_entry",
+			"style" : 
+			{
+				"navigationBarTitleText" : "日营业额录入"
+			}
+		},
+		{
+			"path" : "pages/payment_success/payment_success",
+			"style" : 
+			{
+				"navigationBarTitleText" : "支付成功"
+			}
+		},
+		{
+			"path" : "pages/wechat/wechat",
+			"style" : 
+			{
+				"navigationBarTitleText" : "微信支付"
+			}
+		},
+		{
+			"path" : "pages/alipay/alipay",
+			"style" : 
+			{
+				"navigationBarTitleText" : "支付宝支付"
 			}
 		}
 	],

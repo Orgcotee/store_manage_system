@@ -156,13 +156,13 @@
 	</view>
 	<!-- 4-待支付（已签订） -->
 	<view class="action-btns" v-if="orderData.status === 4">
-	  <button class="btn action">去支付</button>
+	  <button class="btn action" @click="gotoPay(orderData.id)">去支付</button>
 	  <button class="btn action" @click="handleAudit('payment')">账期支付</button>
 	</view>
 	<!-- 支付完成后改为是"pay"状态 -->
 	<!-- 5-账期中（已签订但未付款） -->
 	<view class="action-btns" v-if="orderData.status === 5">
-	  <button class="btn action">去支付</button>
+	  <button class="btn action"  @click="gotoPay(orderData.id)">去支付</button>
 	</view>
 	
 	<!-- 6-履行中（已支付，需采购部门确认交易完成） -->
@@ -294,25 +294,7 @@ export default {
 			  getExpenseType(typeCode) {
 				        return typeCode === 1 ? '支出' : '收入' // 根据collectPay字段转换
 				      },
-    // 处理审批操作
-    // handleAudit(action) {
-    //   if (action === 'approve') {
-    //     this.orderData.status = 2
-    //     uni.showToast({ title: '审批通过', icon: 'success' })
-    //   } else {
-    //     uni.showModal({
-    //       title: '输入驳回原因',
-    //       editable: true,
-    //       success: res => {
-    //         if (res.confirm) {
-    //           this.orderData.status = 1
-    //           this.orderData.reason = res.content
-    //           uni.showToast({ title: '已驳回申请', icon: 'success' })
-    //         }
-    //       }
-    //     })
-    //   }
-    // },
+
 	async handleAudit(action) {
 		let newStatus;
 		let approvalProcess;
@@ -407,6 +389,15 @@ export default {
 			//传递参数订单号number=id
 			uni.navigateTo({
 				url: '/pages/invoice/invoice?orderId='+ id
+			});
+			// uni.navigateTo({
+			// 	// url: '../orderDetail/orderDetail?orders='+encodeURIComponent(JSON.stringify(this.orders))
+			// });
+		},
+	gotoPay(id){
+			//传递参数订单号number=id
+			uni.navigateTo({
+				url: '/pages/payment/payment?orderId='+ id
 			});
 			// uni.navigateTo({
 			// 	// url: '../orderDetail/orderDetail?orders='+encodeURIComponent(JSON.stringify(this.orders))

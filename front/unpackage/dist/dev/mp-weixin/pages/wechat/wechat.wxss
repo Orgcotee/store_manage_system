@@ -1,0 +1,336 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 微信风格配色 */
+.data-v-7d191706:root {
+  --wechat-green: #09BB07;
+  --wechat-bg: #F5F5F5;
+}
+.container.data-v-7d191706 {
+  background: var(--wechat-bg);
+  min-height: 100vh;
+}
+/* 导航栏样式 */
+.nav-bar.data-v-7d191706 {
+  height: 90rpx;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  border-bottom: 1rpx solid #EEE;
+}
+.close-btn.data-v-7d191706 {
+  font-size: 50rpx;
+  color: #666;
+  width: 60rpx;
+}
+.title.data-v-7d191706 {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 500;
+}
+/* 支付主体 */
+.payment-body.data-v-7d191706 {
+  padding: 40rpx 30rpx;
+}
+.payee-info.data-v-7d191706 {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+.label.data-v-7d191706 {
+  display: block;
+  color: #888;
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
+.name.data-v-7d191706 {
+  font-size: 32rpx;
+  color: #333;
+}
+/* 金额显示 */
+.amount.data-v-7d191706 {
+  text-align: center;
+  margin-bottom: 80rpx;
+}
+.symbol.data-v-7d191706 {
+  font-size: 48rpx;
+  color: #333;
+  vertical-align: top;
+}
+.number.data-v-7d191706 {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #333;
+  margin-left: 10rpx;
+}
+/* 支付方式 */
+.payment-methods.data-v-7d191706 {
+  background: #FFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.method-item.data-v-7d191706 {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #EEE;
+}
+.method-item.data-v-7d191706:last-child {
+  border-bottom: none;
+}
+.method-icon.data-v-7d191706 {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 30rpx;
+}
+.method-info.data-v-7d191706 {
+  flex: 1;
+}
+.method-name.data-v-7d191706 {
+  display: block;
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+.method-balance.data-v-7d191706, .card-number.data-v-7d191706 {
+  font-size: 26rpx;
+  color: #999;
+}
+/* 支付按钮 */
+.payment-footer.data-v-7d191706 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30rpx;
+  background: #FFF;
+}
+.pay-btn.data-v-7d191706 {
+  height: 90rpx;
+  background: var(--wechat-green);
+  border-radius: 45rpx;
+  color: #FFF;
+  font-size: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pay-btn.disabled.data-v-7d191706 {
+  background: #CCC;
+}
+.security-tips.data-v-7d191706 {
+  text-align: center;
+  color: #999;
+  font-size: 24rpx;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.security-icon.data-v-7d191706 {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 8rpx;
+}
+/* 密码输入弹窗 */
+.password-modal.data-v-7d191706 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content.data-v-7d191706 {
+  background: #FFF;
+  width: 80%;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.modal-header.data-v-7d191706 {
+  display: flex;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #EEE;
+}
+.modal-header .title.data-v-7d191706 {
+  font-size: 32rpx;
+  color: #333;
+}
+.modal-header .close.data-v-7d191706 {
+  font-size: 40rpx;
+  color: #666;
+}
+.password-input.data-v-7d191706 {
+  padding: 40rpx;
+  position: relative;
+}
+.password-input input.data-v-7d191706 {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100rpx;
+}
+.fake-input.data-v-7d191706 {
+  display: flex;
+  height: 100rpx;
+  border: 1rpx solid #EEE;
+  border-radius: 8rpx;
+}
+.fake-input .dot.data-v-7d191706 {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50rpx;
+  border-right: 1rpx solid #EEE;
+}
+.fake-input .dot.data-v-7d191706:last-child {
+  border-right: none;
+}
+

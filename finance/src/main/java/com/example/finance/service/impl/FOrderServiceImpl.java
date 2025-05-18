@@ -53,11 +53,11 @@ public class FOrderServiceImpl implements FOrderService {
         }
 
         switch (oldStatus) {
-            case 0: // 待审批
-                if (!(newStatus == 1 || newStatus == 2)) {
-                    throw new RuntimeException("无效的状态变更");
-                }
-                break;
+//            case 0: // 待审批
+//                if (!(newStatus == 1 || newStatus == 2)) {
+//                    throw new RuntimeException("无效的状态变更");
+//                }
+//                break;
 //            case 1: // 已驳回
 //                if (newStatus != 0) {
 //                    throw new RuntimeException("已驳回订单只能重新提交审批");

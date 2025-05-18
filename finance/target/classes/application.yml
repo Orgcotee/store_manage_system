@@ -11,4 +11,3 @@ spring:
       config:
         file-extension: yaml # ?????
         namespace: 659f894e-787b-4821-a6ca-a061991c2e74
-

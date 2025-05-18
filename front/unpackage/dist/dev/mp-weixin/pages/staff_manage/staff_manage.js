@@ -101,10 +101,10 @@ var components
 try {
   components = {
     uniPopup: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 181))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 243))
     },
     uniPopupDialog: function () {
-      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog.vue */ 188))
+      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog.vue */ 250))
     },
   }
 } catch (e) {
@@ -128,6 +128,20 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var g0 = _vm.filteredEmployees.length
+  var m0 =
+    _vm.formatDate(_vm.currentEmployee.serviceTime) || "请选择员工入职日期"
+  var m1 = _vm.formatDate(_vm.currentDetail.serviceTime)
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        g0: g0,
+        m0: m0,
+        m1: m1,
+      },
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -168,184 +182,26 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 54));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 56));
+var _config = __webpack_require__(/*! ../../constant/config.js */ 82);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _default = {
   data: function data() {
     return {
       searchName: '',
-      employees: [
-      // 模拟数据
-      {
-        name: '文文',
-        employeeId: '1001',
-        department: '生产部',
-        position: '车间员工',
-        entryDate: '2022-03-15',
-        phone: '13800138000',
-        bankAccount: '6225880123456789',
-        email: 'wenwen@example.com'
-      }, {
-        name: '钟文慧',
-        employeeId: '1002',
-        department: '采购部',
-        position: '员工',
-        entryDate: '2021-07-01',
-        phone: '13912345678',
-        bankAccount: '6228481234567890123',
-        email: 'zhongwh@example.com'
-      }, {
-        name: '钟',
-        employeeId: '1002',
-        department: '采购部',
-        position: '员工',
-        entryDate: '2021-07-01',
-        phone: '13912345678',
-        bankAccount: '6228481234567890123',
-        email: 'zhongwh@example.com'
-      }, {
-        name: '慧慧',
-        employeeId: '1002',
-        department: '采购部',
-        position: '员工',
-        entryDate: '2021-07-01',
-        phone: '13912345678',
-        bankAccount: '6228481234567890123',
-        email: 'zhongwh@example.com'
-      }],
+      employees: [],
       currentEmployee: {},
       currentDetail: {},
       isNew: true
     };
+  },
+  watch: {
+    searchName: function searchName(newVal) {
+      if (!newVal) this.filteredEmployees = this.employees;
+    }
   },
   computed: {
     filteredEmployees: function filteredEmployees() {
@@ -355,17 +211,149 @@ var _default = {
       });
     }
   },
+  mounted: function mounted() {
+    this.loadData();
+  },
   methods: {
+    dateChange: function dateChange(e) {
+      this.currentEmployee.serviceTime = e.detail.value;
+    },
+    // 新增日期格式化方法
+    formatDate: function formatDate(dateString) {
+      if (!dateString) return '';
+      var date = new Date(dateString);
+      var year = date.getFullYear();
+      var month = (date.getMonth() + 1).toString().padStart(2, '0');
+      var day = date.getDate().toString().padStart(2, '0');
+      return "".concat(year, "-").concat(month, "-").concat(day);
+    },
+    loadData: function loadData() {
+      var _this2 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var res;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return uni.request({
+                  url: "".concat(_config.globalURL, "/api/fStaff"),
+                  method: 'GET'
+                });
+              case 3:
+                res = _context.sent;
+                console.log("GET的数据", res.data.data);
+                _this2.employees = res.data.data;
+                _context.next = 11;
+                break;
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](0);
+                uni.showToast({
+                  title: '加载失败',
+                  icon: 'error'
+                });
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 8]]);
+      }))();
+    },
+    saveEmployee: function saveEmployee() {
+      var _this3 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+        var method, url, payload;
+        return _regenerator.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                method = _this3.isNew ? 'POST' : 'PUT';
+                url = "".concat(_config.globalURL, "/api/fStaff"); // 处理日期格式
+                payload = _objectSpread(_objectSpread({}, _this3.currentEmployee), {}, {
+                  serviceTime: _this3.currentEmployee.serviceTime + 'T00:00:00' // 补充时间部分
+                });
+                _context2.next = 6;
+                return uni.request({
+                  url: url,
+                  method: method,
+                  data: payload
+                });
+              case 6:
+                _context2.next = 8;
+                return _this3.loadData();
+              case 8:
+                // 重新加载数据
+                uni.showToast({
+                  title: '保存成功',
+                  icon: 'success'
+                });
+                _context2.next = 14;
+                break;
+              case 11:
+                _context2.prev = 11;
+                _context2.t0 = _context2["catch"](0);
+                uni.showToast({
+                  title: '保存失败',
+                  icon: 'error'
+                });
+              case 14:
+                _this3.$refs.editPopup.close();
+              case 15:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 11]]);
+      }))();
+    },
+    deleteEmployee: function deleteEmployee(id) {
+      var _this4 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+        return _regenerator.default.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return uni.request({
+                  url: "".concat(_config.globalURL, "/api/fStaff/").concat(id),
+                  method: 'DELETE'
+                });
+              case 3:
+                _context3.next = 5;
+                return _this4.loadData();
+              case 5:
+                _context3.next = 10;
+                break;
+              case 7:
+                _context3.prev = 7;
+                _context3.t0 = _context3["catch"](0);
+                uni.showToast({
+                  title: '删除失败',
+                  icon: 'error'
+                });
+              case 10:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 7]]);
+      }))();
+    },
     addEmployee: function addEmployee() {
       this.isNew = true;
       this.currentEmployee = {
         name: '',
-        employeeId: '',
+        id: '',
         department: '',
         position: '',
-        entryDate: '',
+        serviceTime: '',
         phone: '',
-        bankAccount: '',
+        bank: '',
         email: ''
       };
       this.$refs.editPopup.open();
@@ -376,34 +364,11 @@ var _default = {
       this.$refs.editPopup.open();
     },
     showDetail: function showDetail(item) {
-      this.currentDetail = _objectSpread({}, item);
+      this.currentDetail = _objectSpread(_objectSpread({}, item), {}, {
+        // 添加格式化后的日期字段
+        formattedServiceTime: this.formatDate(item.serviceTime)
+      });
       this.$refs.detailPopup.open();
-    },
-    saveEmployee: function saveEmployee() {
-      var _this2 = this;
-      if (this.isNew) {
-        this.employees.push(this.currentEmployee);
-      } else {
-        var index = this.employees.findIndex(function (item) {
-          return item.employeeId === _this2.currentEmployee.employeeId;
-        });
-        this.employees.splice(index, 1, this.currentEmployee);
-      }
-      uni.showToast({
-        title: '保存成功',
-        icon: 'success'
-      });
-      this.$refs.editPopup.close();
-    },
-    deleteEmployee: function deleteEmployee(index) {
-      var _this3 = this;
-      uni.showModal({
-        title: '确认删除',
-        content: '确定要删除该员工记录吗？',
-        success: function success(res) {
-          if (res.confirm) _this3.employees.splice(index, 1);
-        }
-      });
     }
   }
 };

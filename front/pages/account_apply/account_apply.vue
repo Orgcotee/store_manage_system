@@ -2,20 +2,21 @@
   <view class="container">
     <!-- 报账表单 -->
     <view class="form-container">
-      <view class="form-item">
-        <text class="form-label">申请人：</text>
-        <picker 
-          @change="selectEmployee" 
-          :value="selectedIndex" 
-          :range="employees"
-          range-key="name"
-        >
-          <view class="picker">
-            {{ selectedEmployee.name || '请选择申请人' }}
-          </view>
-        </picker>
-      </view>
 
+	<view class="form-item">
+	  <text class="form-label">申请人：</text>
+	  <view class="picker disabled-text">
+		{{ loginer || '未获取到申请人信息' }}
+	  </view>
+	</view>
+	
+	<view class="form-item">
+	  <text class="form-label">工号：</text>
+	  <view class="picker disabled-text">
+		{{ loginerId || '未获取到申请人工号' }}
+	  </view>
+	</view>
+	
       <view class="form-item">
         <text class="form-label">报账类型：</text>
         <picker 
@@ -29,14 +30,6 @@
         </picker>
       </view>
 
-      <view class="form-item">
-        <text class="form-label">采购单号：</text>
-        <input 
-          v-model="formData.purchaseOrder" 
-          placeholder="请输入采购单号"
-          class="input"
-        />
-      </view>
 
       <view class="form-item">
         <text class="form-label">金额（元）：</text>
@@ -73,16 +66,12 @@
         >
           <view class="info-box">
             <view class="header">
-              <text class="applicant">{{ item.employeeName }}</text>
-              <text :class="['status', item.status]">{{ statusMap[item.status] }}</text>
+              <text class="applicant">{{ item.employeeId }}{{ item.employeeName }}</text>
+              <text :class="['status', item.approvalStatus]">{{ statusMap[item.approvalStatus] }}</text>
             </view>
             <view class="detail-row">
               <text class="label">类型：</text>
               <text class="value">{{ item.reimburseType }}</text>
-            </view>
-            <view class="detail-row">
-              <text class="label">单号：</text>
-              <text class="value">{{ item.purchaseOrder }}</text>
             </view>
             <view class="detail-row">
               <text class="label">金额：</text>
@@ -93,7 +82,8 @@
               <text class="approver" v-if="item.approver">审批人：{{ item.approver }}</text>
             </view>
             <view class="details" v-if="item.details">详情：{{ item.details }}</view>
-            <view class="remark" v-if="item.remark">审批意见：{{ item.remark }}</view>
+            <view class="remark-approved" v-if="item.remark != null && item.approvalStatus === 'approved'">审批意见：{{item.remark }}</view>
+			<view class="remark-rejected" v-if="item.remark != null && item.approvalStatus === 'rejected'">审批意见：{{item.remark }}</view>
           </view>
         </view>
       </scroll-view>
@@ -107,49 +97,27 @@
 </template>
 
 <script>
+import { globalURL } from '../../constant/config.js'
 export default {
   data() {
     return {
-      employees: [
-        { id: 1, name: '李文文', department: '生产部' },
-        { id: 2, name: '张慧慧', department: '采购部' },
-        { id: 3, name: '王大力', department: '技术部' }
-      ],
-      reimburseTypes: ['零件采购', '日用品采购', '内部采购'],
+	  loginer:'张伟',
+	  loginerId:'1015',
+      employees: [],
+      reimburseTypes: ['物品损坏', '日用品损坏', '消耗品'],
       selectedIndex: -1,
       typeIndex: -1,
       formData: {
         employeeId: '',
         employeeName: '',
         reimburseType: '',
-        purchaseOrder: '',
         amount: '',
-        details: ''
+        details: '',
+		img:'',
+		approvalStatus: 0,
+		applicationTime: ''
       },
-      applications: [
-        {
-          id: 1,
-          employeeName: '李文文',
-          reimburseType: '零件采购',
-          purchaseOrder: 'CG202307001',
-          amount: 1500,
-          details: '采购10套轴承配件',
-          applyTime: '2023-07-20 14:30',
-          status: 'approved',
-          approver: '财务部-张会计',
-          remark: '票据已核实，同意报销'
-        },
-        {
-          id: 2,
-          employeeName: '王大力',
-          reimburseType: '内部采购',
-          purchaseOrder: 'NB202307015',
-          amount: 3000,
-          details: '会议室投影设备采购',
-          applyTime: '2023-07-18 09:15',
-          status: 'pending'
-        }
-      ],
+      applications: [],
       statusMap: {
         pending: '审批中',
         approved: '已通过',
@@ -157,6 +125,13 @@ export default {
       }
     }
   },
+  async created() {
+      await this.loadEmployees();
+    },
+	created() {
+	  this.loadEmployees();
+	  this.loadApplications();
+	},
   computed: {
     selectedEmployee() {
       return this.selectedIndex >= 0 
@@ -170,6 +145,88 @@ export default {
     }
   },
   methods: {
+	  getStatusText(status) {
+	    const map = {0: 'pending', 1: 'approved', 2: 'rejected'};
+	    return map[status];
+	  },
+	  // 改成按部门查找 **
+	  async loadEmployees() {
+	        const res = await uni.request({
+	          url: `${globalURL}/api/fStaff`,
+	          method: 'GET'
+	        });
+	        this.employees = res.data.data.map(item => ({
+	          id: item.id,
+	          name: item.name,
+	          department: item.department
+	        }));
+	      },
+		  // 需改成根据登录人员姓名所在部门查找申请记录**
+	async loadApplications() {
+	  try {
+	    const res = await uni.request({
+	      url: `${globalURL}/api/reimbursement/applicantId/${this.loginerId}`,
+	      method: 'GET'
+	    });
+	    console.log("加载申请记录：",res.data.data);
+	    this.applications = res.data.data.map(item => ({
+	      id: item.id,
+		  employeeId: item.applicantId,
+	      employeeName: item.applicant,
+	      reimburseType: item.category,
+	      amount: item.amount,
+	      details: item.details,
+	      applyTime: this.formatDate(item.applicationTime),
+	      // approvalStatus: this.getStatusText(item.status),
+		  approvalStatus: item.status,
+	      approver: item.approver,
+	      remark: item.approvalOpinion
+	    }));
+	  } catch (e) {
+	    console.error('加载记录失败:', e);
+	  }
+	},
+	async submitApplication() {
+	  if (!this.validateForm()) return;
+	
+	  const payload = {
+		applicantId: this.loginerId,
+	    applicant: this.loginer,
+	    category: this.formData.reimburseType,
+	    inOut: 1, // 对应后端的1支出/0收入
+	    amount: Number(this.formData.amount).toFixed(2),
+	    details: this.formData.details,
+	    img: "", // 需要补充图片上传功能
+	    approvalStatus: 0, // 0-待审批状态
+	    applicationTime: new Date()
+	  };
+	
+	  try {
+	    const res = await uni.request({
+	      url: `${globalURL}/api/reimbursement/create`,
+	      method: 'POST',
+	      data: payload,
+	      header: { 'Content-Type': 'application/json' }
+	    });
+	    
+	    if (res.statusCode === 200) {
+			// 前端手动插入新数据
+	      // this.applications.unshift({
+	      //   ...payload,
+	      //   id: res.data.data,
+	      //   applyTime: this.formatDate(new Date()),
+	      //   status: 'pending',
+	      //   approvalStatus: 0
+	      // });
+	      this.resetForm();
+	      this.$refs.successPopup.open();
+		  
+		  await this.loadApplications();
+	    }
+	  } catch (e) {
+	    uni.showToast({ title: '提交失败，请重试', icon: 'none' });
+	  }
+	},
     selectEmployee(e) {
       this.selectedIndex = e.detail.value
       this.formData.employeeId = this.employees[this.selectedIndex].id
@@ -180,16 +237,12 @@ export default {
       this.formData.reimburseType = this.reimburseTypes[this.typeIndex]
     },
     validateForm() {
-      if (!this.formData.employeeId) {
-        uni.showToast({ title: '请选择申请人', icon: 'none' })
-        return false
-      }
+      // if (!this.formData.employeeId) {
+      //   uni.showToast({ title: '请选择申请人', icon: 'none' })
+      //   return false
+      // }
       if (!this.formData.reimburseType) {
         uni.showToast({ title: '请选择报账类型', icon: 'none' })
-        return false
-      }
-      if (!this.formData.purchaseOrder.trim()) {
-        uni.showToast({ title: '请输入采购单号', icon: 'none' })
         return false
       }
       if (!this.formData.amount || Number(this.formData.amount) <= 0) {
@@ -202,24 +255,35 @@ export default {
       }
       return true
     },
-    submitApplication() {
-      if (!this.validateForm()) return
+	// 添加图片上传方法
+	async uploadImage() {
+	  const res = await uni.chooseImage();
+	  const file = res.tempFilePaths[0];
+	  const uploadRes = await uni.uploadFile({
+	    url: `${globalURL}/api/upload`,
+	    filePath: file,
+	    name: 'file'
+	  });
+	  this.formData.img = JSON.parse(uploadRes.data).data;
+	},
+    // submitApplication() {
+    //   if (!this.validateForm()) return
 
-      const newApplication = {
-        id: Date.now(),
-        ...this.formData,
-        applyTime: this.getCurrentTime(),
-        status: 'pending'
-      }
+    //   const newApplication = {
+    //     id: Date.now(),
+    //     ...this.formData,
+    //     applyTime: this.getCurrentTime(),
+    //     status: 'pending'
+    //   }
 
-      this.applications.unshift(newApplication)
-      this.resetForm()
-      this.$refs.successPopup.open()
-      setTimeout(() => this.$refs.successPopup.close(), 1500)
-    },
-    getCurrentTime() {
-      const now = new Date()
-      return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`
+    //   this.applications.unshift(newApplication)
+    //   this.resetForm()
+    //   this.$refs.successPopup.open()
+    //   setTimeout(() => this.$refs.successPopup.close(), 1500)
+    // },
+    formatDate(date) {
+      const d = new Date(date);
+      return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
     },
     resetForm() {
       this.selectedIndex = -1
@@ -228,7 +292,6 @@ export default {
         employeeId: '',
         employeeName: '',
         reimburseType: '',
-        purchaseOrder: '',
         amount: '',
         details: ''
       }
@@ -238,6 +301,13 @@ export default {
 </script>
 
 <style scoped>
+/* 新增置灰样式 */
+.disabled-text {
+  color: #999 !important;         /* 浅灰色文字 */
+  background-color: #f5f5f5;      /* 浅灰色背景 */
+  cursor: not-allowed;            /* 禁用光标 */
+  opacity: 0.9;                   /* 轻微透明效果 */
+}
 .container {
   padding: 20rpx;
   background-color: #f8f9fa;
@@ -385,7 +455,11 @@ export default {
   line-height: 1.6;
 }
 
-.remark {
+.remark-rejected {
   color: #f44336;
+}
+
+.remark-approved {
+  color: #666;
 }
 </style>
